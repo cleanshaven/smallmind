@@ -8,6 +8,12 @@ Class {
 }
 
 { #category : #initialization }
+BMPresenter >> connectPresenters [ 
+	self spCanvas canvas: BMCanvas new
+
+]
+
+{ #category : #initialization }
 BMPresenter >> initializePresenters [ 
 	super initializePresenters.
 	self spCanvas: self newRoassal.

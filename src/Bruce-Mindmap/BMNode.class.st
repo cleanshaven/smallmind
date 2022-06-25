@@ -6,10 +6,32 @@ Class {
 		'font',
 		'foreColor',
 		'backgroundColor',
-		'children'
+		'children',
+		'parent',
+		'announcer'
 	],
 	#category : #'Bruce-Mindmap-model'
 }
+
+{ #category : #announcer }
+BMNode >> announce: anAnnouncement [
+
+	self announcer announce: anAnnouncement.
+	
+
+]
+
+{ #category : #accessing }
+BMNode >> announcer [
+
+	^ announcer
+]
+
+{ #category : #accessing }
+BMNode >> announcer: anObject [
+
+	announcer := anObject
+]
 
 { #category : #accessing }
 BMNode >> backgroundColor [
@@ -20,7 +42,8 @@ BMNode >> backgroundColor [
 { #category : #accessing }
 BMNode >> backgroundColor: anObject [
 
-	backgroundColor := anObject
+	backgroundColor := anObject.
+	self announce: (BMAnnounceBackgroundColorChanged new newData: anObject; yourself)
 ]
 
 { #category : #accessing }
@@ -44,7 +67,8 @@ BMNode >> font [
 { #category : #accessing }
 BMNode >> font: anObject [
 
-	font := anObject
+	font := anObject.
+	self announce: (BMAnnounceFontChanged new newData: anObject; yourself)
 ]
 
 { #category : #accessing }
@@ -56,7 +80,27 @@ BMNode >> foreColor [
 { #category : #accessing }
 BMNode >> foreColor: anObject [
 
-	foreColor := anObject
+	foreColor := anObject.
+	self announce: (BMAnnounceForeColorChanged new newData: anObject; yourself)
+]
+
+{ #category : #initialization }
+BMNode >> initialize [ 
+	super initialize.
+	self announcer: Announcer new
+
+]
+
+{ #category : #accessing }
+BMNode >> parent [
+
+	^ parent
+]
+
+{ #category : #accessing }
+BMNode >> parent: anObject [
+
+	parent := anObject
 ]
 
 { #category : #accessing }
@@ -68,5 +112,12 @@ BMNode >> text [
 { #category : #accessing }
 BMNode >> text: anObject [
 
-	text := anObject
+	text := anObject.
+	self announce: (BMAnnounceTextChanged new newData: anObject; yourself)
+]
+
+{ #category : #announcer }
+BMNode >> when: anAnnouncement do: aValueable [
+	self announcer when: anAnnouncement do: aValueable
+
 ]
