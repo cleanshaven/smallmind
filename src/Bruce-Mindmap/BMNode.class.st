@@ -87,6 +87,7 @@ BMNode >> foreColor: anObject [
 { #category : #initialization }
 BMNode >> initialize [ 
 	super initialize.
+	self children: OrderedCollection new.
 	self announcer: Announcer new
 
 ]

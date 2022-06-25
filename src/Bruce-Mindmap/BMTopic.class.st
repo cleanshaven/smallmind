@@ -7,6 +7,47 @@ Class {
 	#category : #'Bruce-Mindmap-roassal'
 }
 
+{ #category : #adding }
+BMTopic >> addChild [
+	| text newNode line|
+	
+	text := self getText: ''.
+	text ifNotNil: [ 
+		newNode := BMTopic new.
+		newNode model 
+			text: text;
+			parent: self.
+		self model children add: newNode.
+		self canvas add: newNode.
+		line := RSBezier new.
+		line 
+			withBorderAttachPoint;
+			from: self;
+			to: newNode;
+			controlPointsController: RSHorizontalCPAPController new.
+		self canvas add: line.
+		RSForceBasedLayout new charge: -1000; on: self canvas nodes.
+		self canvas zoomToFit
+	]
+		
+			
+			
+
+]
+
+{ #category : #adding }
+BMTopic >> addSibling [
+	self model parent addChild
+
+]
+
+{ #category : #'private ' }
+BMTopic >> adjustSize [ 
+	self extent: self label textWidth@label textHeight.
+	self updateCanvas
+
+]
+
 { #category : #initialization }
 BMTopic >> createMenu [
 
@@ -34,6 +75,15 @@ BMTopic >> foreColorChanged: aColor [
 	self label color: aColor.
 	self updateCanvas
 
+]
+
+{ #category : #utilities }
+BMTopic >> getText: initialText [
+	^SpRequestDialog new
+		title: 'Node Text';
+		label: 'Text';
+		text: initialText;
+		openModal. 
 ]
 
 { #category : #initialization }
@@ -66,6 +116,7 @@ BMTopic >> label: anObject [
 { #category : #'announcement handling' }
 BMTopic >> labelChanged: aString [
 	self label text: aString.
+	self adjustSize.
 	self updateCanvas
 
 ]

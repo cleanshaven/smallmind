@@ -7,6 +7,13 @@ Class {
 	#category : #'Bruce-Mindmap-roassal'
 }
 
+{ #category : #'private ' }
+BMMainTopic >> adjustSize [
+	self circle size: (self label textWidth) + 5.
+	self size: (self label textWidth) + 5.
+	self updateCanvas 
+]
+
 { #category : #accessing }
 BMMainTopic >> circle [
 
@@ -37,7 +44,7 @@ BMMainTopic >> initialize [
 	super initialize.
 	self circle: RSCircle new.
 	self add: self circle.
-	self label model text: 'My Mind'.
+	self model text: 'My Mind'.
 	self label pushFront
 
 ]

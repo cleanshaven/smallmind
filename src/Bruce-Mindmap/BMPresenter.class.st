@@ -13,6 +13,15 @@ BMPresenter >> connectPresenters [
 
 ]
 
+{ #category : #layout }
+BMPresenter >> defaultLayout [
+	^SpBoxLayout newTopToBottom 
+		add: #spCanvas;
+		yourself
+	
+
+]
+
 { #category : #initialization }
 BMPresenter >> initializePresenters [ 
 	super initializePresenters.
