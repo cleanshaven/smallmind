@@ -64,9 +64,43 @@ BMTopic >> createMenu [
 				 ])
 ]
 
+{ #category : #'as yet unclassified' }
+BMTopic >> defaultForeColor [
+	^Color black
+
+]
+
+{ #category : #'trait rendering' }
+BMTopic >> editColor [ 
+	| color |
+	
+	color := self getColor: self model foreColor.
+	color ifNotNil: [ self model foreColor: color ]
+]
+
+{ #category : #'as yet unclassified' }
+BMTopic >> editFont [
+
+	| newFont |
+	
+	newFont := self getFont: self model font.
+	newFont ifNotNil: [ self model font: newFont ]
+
+]
+
+{ #category : #actions }
+BMTopic >> editText [
+	| newText |
+	newText := self getText: self model text.
+	newText ifNotNil: [ self model text: newText ]
+
+]
+
 { #category : #'announcement handling' }
 BMTopic >> fontChanged: aFont [
 	self label font: aFont.
+	self label text: self model text.
+	self adjustSize.
 	self updateCanvas
 ]
 
@@ -74,6 +108,33 @@ BMTopic >> fontChanged: aFont [
 BMTopic >> foreColorChanged: aColor [
 	self label color: aColor.
 	self updateCanvas
+
+]
+
+{ #category : #utilities }
+BMTopic >> getColor: initialColor [
+	| dialog |
+	
+	dialog := ColorSelectorDialogWindow new
+		title: 'Choose color';
+		selectedColor: initialColor.
+	dialog openModal.
+	^dialog cancelled
+		ifTrue: [ nil ]
+		ifFalse: [ dialog selectedColor ]
+
+]
+
+{ #category : #utilities }
+BMTopic >> getFont: initialFont [
+	|newFont|
+	newFont := nil.
+	FontChooser 
+		openModalWithTitle: 'Choose a Font'
+		initialFont: initialFont 
+		onAcceptDo: [ :e | newFont := e ].
+	
+	^newFont
 
 ]
 
@@ -96,6 +157,9 @@ BMTopic >> initialize [
 	self color: Color transparent.
 	self label: RSLabel new.
 	self add: label.
+	self model foreColor: self defaultForeColor.
+	self model font: self label font.
+
 	self draggable.
 	self createMenu.
 

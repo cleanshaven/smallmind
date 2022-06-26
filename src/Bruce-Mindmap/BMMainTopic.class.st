@@ -9,9 +9,16 @@ Class {
 
 { #category : #'private ' }
 BMMainTopic >> adjustSize [
-	self circle size: (self label textWidth) + 5.
+	self circle ifNotNil: [self circle size: (self label textWidth) + 5].
 	self size: (self label textWidth) + 5.
 	self updateCanvas 
+]
+
+{ #category : #'as yet unclassified' }
+BMMainTopic >> backgroundColorChanged: aColor [
+	self circle color: aColor.
+	self updateCanvas
+
 ]
 
 { #category : #accessing }
@@ -39,12 +46,33 @@ BMMainTopic >> createMenu [
 				 ])
 ]
 
+{ #category : #defaults }
+BMMainTopic >> defaultBackgroundColor [ 
+	^Color gray
+
+]
+
+{ #category : #'as yet unclassified' }
+BMMainTopic >> editBackgroundColor [
+	
+	"comment stating purpose of instance-side method"
+	"scope: class-variables  &  instance-variables"	
+			
+	| color |
+	
+	color := self getColor: self model backgroundColor.
+	color ifNotNil: [ self model backgroundColor: color ]
+]
+
 { #category : #initialization }
 BMMainTopic >> initialize [
 	super initialize.
+
 	self circle: RSCircle new.
 	self add: self circle.
 	self model text: 'My Mind'.
-	self label pushFront
+	self model backgroundColor: self defaultBackgroundColor.
+	self model when: BMAnnounceBackgroundColorChanged do: [ :annoucement |  self backgroundColorChanged: annoucement newData].
+	self label pushFront.
 
 ]
