@@ -226,3 +226,17 @@ BMTopic >> labelChanged: aString [
 BMTopic >> updateCanvas [
 	self canvas ifNotNil: [ self canvas signalUpdate ]
 ]
+
+{ #category : #writing }
+BMTopic >> writeNode: writer [
+
+	writer tag: self xmlNodeName with: [ 
+		writer tag: 'text' with: [self model text].
+		self model children do: [ :node | node writeNode: writer ]]
+
+]
+
+{ #category : #writing }
+BMTopic >> xmlNodeName [
+	^'node'
+]

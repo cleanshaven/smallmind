@@ -42,8 +42,10 @@ BMMainTopic >> createMenu [
 				add: 'Edit' target: box selector: #editText argument: #();
 				add: 'Color' target: box selector: #editColor argument: #();
 				add: 'Background Color' target: box selector: #editBackgroundColor argument: #();
-				add: 'Font' target: box selector: #editFont argument: #()
-				 ])
+				add: 'Font' target: box selector: #editFont argument: #();
+				addLine;
+				add: 'Save' target: box selector: #saveMap argument: #()
+		])
 ]
 
 { #category : #defaults }
@@ -75,4 +77,27 @@ BMMainTopic >> initialize [
 	self model when: BMAnnounceBackgroundColorChanged do: [ :annoucement |  self backgroundColorChanged: annoucement newData].
 	self label pushFront.
 
+]
+
+{ #category : #'as yet unclassified' }
+BMMainTopic >> saveMap [
+
+	| reference writer|
+	
+	reference := UIManager default 
+		chooseForSaveFileReference: 'Save Mindmap as?'
+		extensions: #()
+		path: ''.
+	
+	reference ifNotNil: [ 
+		writer := XMLWriter new.
+		writer 
+			doctype;
+			tag: 'mindmap' with: [ self writeNode: writer ].
+		reference writeStreamDo: [ :stream | 
+			stream 
+				truncate;
+				<< writer asString;
+				close ]
+	]
 ]
