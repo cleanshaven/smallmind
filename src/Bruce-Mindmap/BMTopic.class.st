@@ -48,6 +48,19 @@ BMTopic >> adjustSize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+BMTopic >> confirmDeleteChild [
+
+	| ok |
+	
+	ok := SpConfirmDialog  new
+		title: 'Confirm Delete Node';
+		label: 'Are you sure (Child nodes will also be deleted';
+		openModal.
+	^ok
+
+]
+
 { #category : #initialization }
 BMTopic >> createMenu [
 
@@ -67,6 +80,30 @@ BMTopic >> createMenu [
 { #category : #'as yet unclassified' }
 BMTopic >> defaultForeColor [
 	^Color black
+
+]
+
+{ #category : #'as yet unclassified' }
+BMTopic >> deleteAllChildren: node [
+	
+	node model children do: [ :child | self deleteAllChildren: child ].
+	node remove
+
+]
+
+{ #category : #'as yet unclassified' }
+BMTopic >> deleteChild: child [
+
+	self model children remove: child.
+	self deleteAllChildren: child
+]
+
+{ #category : #'as yet unclassified' }
+BMTopic >> deleteNode [
+
+	self confirmDeleteChild  ifTrue: [ 
+		self model parent deleteChild: self.
+		self updateCanvas ]
 
 ]
 
