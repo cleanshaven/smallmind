@@ -48,7 +48,7 @@ BMTopic >> adjustSize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 BMTopic >> confirmDeleteChild [
 
 	| ok |
@@ -77,13 +77,13 @@ BMTopic >> createMenu [
 				 ])
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #defaults }
 BMTopic >> defaultForeColor [
 	^Color black
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 BMTopic >> deleteAllChildren: node [
 	
 	node model children do: [ :child | self deleteAllChildren: child ].
@@ -91,14 +91,14 @@ BMTopic >> deleteAllChildren: node [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 BMTopic >> deleteChild: child [
 
 	self model children remove: child.
 	self deleteAllChildren: child
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 BMTopic >> deleteNode [
 
 	self confirmDeleteChild  ifTrue: [ 
@@ -115,7 +115,7 @@ BMTopic >> editColor [
 	color ifNotNil: [ self model foreColor: color ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 BMTopic >> editFont [
 
 	| newFont |
@@ -228,15 +228,23 @@ BMTopic >> updateCanvas [
 ]
 
 { #category : #writing }
+BMTopic >> writeAdditionalTagsTo: writer [
+
+]
+
+{ #category : #writing }
 BMTopic >> writeNode: writer [
 
 	writer tag: self xmlNodeName with: [ 
-		writer tag: 'text' with: [self model text].
+		writer tag: BMXMLTags text with: self model text.
+		self model font bmWriteXMLTo: writer.
+		self model foreColor bmWriteXMLTo: writer purpose: 'foreground'.
+		self writeAdditionalTagsTo: writer. 
 		self model children do: [ :node | node writeNode: writer ]]
 
 ]
 
 { #category : #writing }
 BMTopic >> xmlNodeName [
-	^'node'
+	^BMXMLTags childNode
 ]

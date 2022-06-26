@@ -54,7 +54,7 @@ BMMainTopic >> defaultBackgroundColor [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 BMMainTopic >> editBackgroundColor [
 	
 	"comment stating purpose of instance-side method"
@@ -79,7 +79,7 @@ BMMainTopic >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #writing }
 BMMainTopic >> saveMap [
 
 	| reference writer|
@@ -91,13 +91,26 @@ BMMainTopic >> saveMap [
 	
 	reference ifNotNil: [ 
 		writer := XMLWriter new.
+	"	writer enablePrettyPrinting."
 		writer 
-			doctype;
-			tag: 'mindmap' with: [ self writeNode: writer ].
+			tag: BMXMLTags mindmap with: [ self writeNode: writer ].
 		reference writeStreamDo: [ :stream | 
 			stream 
 				truncate;
 				<< writer asString;
 				close ]
 	]
+]
+
+{ #category : #writing }
+BMMainTopic >> writeAdditionalTagsTo: writer [
+	super writeAdditionalTagsTo: writer.
+	self model backgroundColor bmWriteXMLTo: writer purpose: 'background'
+
+]
+
+{ #category : #writing }
+BMMainTopic >> xmlNodeName [ 
+	^BMXMLTags rootNode
+
 ]
