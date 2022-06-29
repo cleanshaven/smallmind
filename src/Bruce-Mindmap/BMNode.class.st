@@ -105,6 +105,12 @@ BMNode >> parent: anObject [
 ]
 
 { #category : #accessing }
+BMNode >> parentModel [
+	^self parentModel
+
+]
+
+{ #category : #accessing }
 BMNode >> text [
 
 	^ text

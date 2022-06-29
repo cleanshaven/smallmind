@@ -14,7 +14,7 @@ BMMainTopic >> adjustSize [
 	self updateCanvas 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'announcement handling' }
 BMMainTopic >> backgroundColorChanged: aColor [
 	self circle color: aColor.
 	self updateCanvas
@@ -38,13 +38,14 @@ BMMainTopic >> createMenu [
 	self @ (RSMenuActivable new
 		menuDo: [ :menu :box | 
 			menu 
-				add: 'Add Child' target: box selector: #addChild argument: #();
-				add: 'Edit' target: box selector: #editText argument: #();
-				add: 'Color' target: box selector: #editColor argument: #();
-				add: 'Background Color' target: box selector: #editBackgroundColor argument: #();
-				add: 'Font' target: box selector: #editFont argument: #();
+				add: 'Add Child...' target: box selector: #addChild argument: #();
+				add: 'Edit...' target: box selector: #editText argument: #();
+				add: 'Color...' target: box selector: #editColor argument: #();
+				add: 'Background Color...' target: box selector: #editBackgroundColor argument: #();
+				add: 'Font...' target: box selector: #editFont argument: #();
 				addLine;
-				add: 'Save' target: box selector: #saveMap argument: #()
+				add: 'Save...' target: box selector: #saveMap argument: #();
+				add: 'Open...' target: box selector: #openMap argument: #()
 		])
 ]
 
@@ -77,6 +78,21 @@ BMMainTopic >> initialize [
 	self model when: BMAnnounceBackgroundColorChanged do: [ :annoucement |  self backgroundColorChanged: annoucement newData].
 	self label pushFront.
 
+]
+
+{ #category : #actions }
+BMMainTopic >> openMap [
+
+	| fileName parser stream |
+	
+	fileName := UIManager default chooseFullFileNameMatching: #('*.xml').
+	fileName ifNotNil: [
+		stream := fileName asFileReference readStream. 
+		parser := BMSAXParser on: stream.
+		parser canvas: self canvas.
+		parser parseDocument.
+		stream close
+	]
 ]
 
 { #category : #writing }
