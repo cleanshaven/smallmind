@@ -83,13 +83,15 @@ BMMainTopic >> initialize [
 { #category : #actions }
 BMMainTopic >> openMap [
 
-	| fileName parser stream |
+	| fileName parser stream  canvas|
 	
 	fileName := UIManager default chooseFullFileNameMatching: #('*.xml').
 	fileName ifNotNil: [
+		canvas := self canvas.
+		self canvas clear.
 		stream := fileName asFileReference readStream. 
 		parser := BMSAXParser on: stream.
-		parser canvas: self canvas.
+		parser canvas: canvas.
 		parser parseDocument.
 		stream close
 	]

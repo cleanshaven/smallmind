@@ -30,12 +30,16 @@ BMSAXParser >> characters: aString [
 { #category : #'handling - content' }
 BMSAXParser >> endDocument [ 
 
-	| lineBuilder |
+"	| lineBuilder |
 	
 	lineBuilder := RSLineBuilder bezier.
 	lineBuilder canvas: self canvas.
 	lineBuilder withBorderAttachPoint.
-	lineBuilder connectFrom: #parentModel.	
+	lineBuilder shapes: self canvas nodes.
+	lineBuilder connectFrom: #parentModel.	 "
+		RSForceBasedLayout new charge: -1000; on: self canvas nodes.
+		self canvas zoomToFit.
+		self canvas signalUpdate
 
 ]
 
@@ -62,10 +66,10 @@ BMSAXParser >> handleColor: anAttributeDictionary [
 	| color |
 	
 	color := Color 
-		r: (anAttributeDictionary at: 'red') asFloatPoint
-		g: (anAttributeDictionary at: 'green') asFloatPoint 
-		b: (anAttributeDictionary at: 'blue') asFloatPoint 
-		alpha: (anAttributeDictionary at: 'alpha') asFloatPoint.
+		r: (anAttributeDictionary at: 'red') asNumber
+		g: (anAttributeDictionary at: 'green') asNumber 
+		b: (anAttributeDictionary at: 'blue') asNumber 
+		alpha: (anAttributeDictionary at: 'alpha') asNumber.
 		
 	(anAttributeDictionary at: 'purpose') = 'foreground' ifTrue: [ self top model foreColor: color ].
 	(anAttributeDictionary at: 'purpose') = 'background' ifTrue: [  self top model backgroundColor: color ]
@@ -74,12 +78,21 @@ BMSAXParser >> handleColor: anAttributeDictionary [
 
 { #category : #'as yet unclassified' }
 BMSAXParser >> handleEndNode [
-	| node |
+	| node line|
 	
 	node := self pop.
 	self top model children add: node.
 	node model parent: self top.
 	self canvas add: node.
+	
+	node model children do: [ :child |
+		line := RSBezier new.
+		line 
+			withBorderAttachPoint;
+			from: node;
+			to: child;
+			controlPointsController: RSHorizontalCPAPController new.
+		self canvas add: line]
 	
 	
 
@@ -87,12 +100,20 @@ BMSAXParser >> handleEndNode [
 
 { #category : #'handling - content' }
 BMSAXParser >> handleEndRoot [
-	| endNode |
+	| endNode line|
 	
 	endNode := self pop.
-	self canvas mainTopic remove.
+	"self canvas mainTopic remove."
 	self canvas mainTopic: endNode.
-	self canvas add: endNode
+	self canvas add: endNode.
+	endNode model children do: [ :child |
+		line := RSBezier new.
+		line 
+			withBorderAttachPoint;
+			from: endNode;
+			to: child;
+			controlPointsController: RSHorizontalCPAPController new.
+		self canvas add: line]
 
 ]
 
@@ -110,10 +131,10 @@ BMSAXParser >> handleFont: anAttributeDictionary [
 	
 	font := LogicalFont 
 		familyName: (anAttributeDictionary at: 'familyName')
-		pointSize: (anAttributeDictionary at: 'pointSize') asFloatPoint 
-		stretchValue: (anAttributeDictionary at: 'stretchValue') asFloatPoint 
-		weightValue: (anAttributeDictionary at: 'weightValue') asFloatPoint 
-		slantValue: (anAttributeDictionary at: 'slantValue') asFloatPoint.
+		pointSize: (anAttributeDictionary at: 'pointSize') asNumber
+		stretchValue: (anAttributeDictionary at: 'stretchValue') asNumber
+		weightValue: (anAttributeDictionary at: 'weightValue') asNumber
+		slantValue: (anAttributeDictionary at: 'slantValue') asNumber.
 		
 	self top model font: font
 	

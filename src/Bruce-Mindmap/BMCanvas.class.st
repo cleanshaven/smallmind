@@ -7,6 +7,12 @@ Class {
 	#category : #'Bruce-Mindmap-roassal'
 }
 
+{ #category : #removing }
+BMCanvas >> clear [
+	self removeAllChildren: mainTopic.
+	self mainTopic: nil
+]
+
 { #category : #initialization }
 BMCanvas >> initialize [ 
 	super initialize.
@@ -26,4 +32,10 @@ BMCanvas >> mainTopic [
 BMCanvas >> mainTopic: anObject [
 
 	mainTopic := anObject
+]
+
+{ #category : #removing }
+BMCanvas >> removeAllChildren: aNode [
+	aNode model children do: [ :child | self removeAllChildren: child ].
+	aNode remove
 ]

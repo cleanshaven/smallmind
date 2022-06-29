@@ -9,7 +9,7 @@ Color >> bmWriteXMLTo: writer purpose: aString [
 		with: 'green'->self green asString
 		with: 'blue'->self blue asString 
 		with: 'alpha'->self alpha asString
-		with: 'pupose'->aString.
+		with: 'purpose'->aString.
 		
 	writer tag: BMXMLTags color attributes: attributes
 
