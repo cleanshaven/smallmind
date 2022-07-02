@@ -9,7 +9,7 @@ Class {
 
 { #category : #initialization }
 BMPresenter >> connectPresenters [ 
-	self spCanvas canvas: BMCanvas new
+	self spCanvas canvas: (BMCanvas new application: self application; yourself)
 
 ]
 

@@ -48,6 +48,11 @@ BMTopic >> adjustSize [
 
 ]
 
+{ #category : #accessing }
+BMTopic >> application [ 
+	^self canvas application
+]
+
 { #category : #removing }
 BMTopic >> confirmDeleteChild [
 
@@ -70,6 +75,7 @@ BMTopic >> createMenu [
 				add: 'Add Child' target: box selector: #addChild argument: #();
 				add: 'AddSibling' target: box selector: #addSibling argument: #();
 				add: 'Edit' target: box selector: #editText argument: #();
+				add: 'Details' target: box selector: #editDetails argument: #();
 				add: 'Color' target: box selector: #editColor argument: #();
 				add: 'Font' target: box selector: #editFont argument: #();
 				addLine;
@@ -113,6 +119,22 @@ BMTopic >> editColor [
 	
 	color := self getColor: self model foreColor.
 	color ifNotNil: [ self model foreColor: color ]
+]
+
+{ #category : #actions }
+BMTopic >> editDetail [
+	| newText |
+	newText := self getDetail: self model detail.
+	newText ifNotNil: [ self model details: newText ]
+
+]
+
+{ #category : #actions }
+BMTopic >> editDetails [
+	| newText |
+	newText := self getDetail: self model details.
+	newText ifNotNil: [ self model details: newText ]
+
 ]
 
 { #category : #actions }
@@ -163,6 +185,17 @@ BMTopic >> getColor: initialColor [
 ]
 
 { #category : #utilities }
+BMTopic >> getDetail: initialText [
+	
+	
+	^self application newRequestText
+		title: self model text;
+		label: 'Detail';
+		text: initialText;
+		openModal. 
+]
+
+{ #category : #utilities }
 BMTopic >> getFont: initialFont [
 	|newFont|
 	newFont := nil.
@@ -177,7 +210,9 @@ BMTopic >> getFont: initialFont [
 
 { #category : #utilities }
 BMTopic >> getText: initialText [
-	^SpRequestDialog new
+	
+	
+	^self application newRequest
 		title: 'Node Text';
 		label: 'Text';
 		text: initialText;
@@ -237,6 +272,7 @@ BMTopic >> writeNode: writer [
 
 	writer tag: self xmlNodeName with: [ 
 		writer tag: BMXMLTags text with: self model text.
+		self model details isEmptyOrNil ifFalse:[writer tag: 'detail' with: self model details].
 		self model font bmWriteXMLTo: writer.
 		self model foreColor bmWriteXMLTo: writer purpose: 'foreground'.
 		self writeAdditionalTagsTo: writer. 

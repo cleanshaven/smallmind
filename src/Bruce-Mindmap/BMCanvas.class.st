@@ -2,10 +2,23 @@ Class {
 	#name : #BMCanvas,
 	#superclass : #RSCanvas,
 	#instVars : [
-		'mainTopic'
+		'mainTopic',
+		'application'
 	],
 	#category : #'Bruce-Mindmap-roassal'
 }
+
+{ #category : #accessing }
+BMCanvas >> application [
+
+	^ application
+]
+
+{ #category : #accessing }
+BMCanvas >> application: anObject [
+
+	application := anObject
+]
 
 { #category : #removing }
 BMCanvas >> clear [

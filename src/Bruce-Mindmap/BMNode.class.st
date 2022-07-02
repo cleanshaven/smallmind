@@ -8,7 +8,8 @@ Class {
 		'backgroundColor',
 		'children',
 		'parent',
-		'announcer'
+		'announcer',
+		'details'
 	],
 	#category : #'Bruce-Mindmap-model'
 }
@@ -59,6 +60,18 @@ BMNode >> children: anObject [
 ]
 
 { #category : #accessing }
+BMNode >> details [
+
+	^ details
+]
+
+{ #category : #accessing }
+BMNode >> details: anObject [
+
+	details := anObject
+]
+
+{ #category : #accessing }
 BMNode >> font [
 
 	^ font
@@ -88,7 +101,8 @@ BMNode >> foreColor: anObject [
 BMNode >> initialize [ 
 	super initialize.
 	self children: OrderedCollection new.
-	self announcer: Announcer new
+	self announcer: Announcer new.
+	self details: ''
 
 ]
 

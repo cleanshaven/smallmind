@@ -40,6 +40,8 @@ BMMainTopic >> createMenu [
 			menu 
 				add: 'Add Child...' target: box selector: #addChild argument: #();
 				add: 'Edit...' target: box selector: #editText argument: #();
+								add: 'Details' target: box selector: #editDetails argument: #();
+
 				add: 'Color...' target: box selector: #editColor argument: #();
 				add: 'Background Color...' target: box selector: #editBackgroundColor argument: #();
 				add: 'Font...' target: box selector: #editFont argument: #();

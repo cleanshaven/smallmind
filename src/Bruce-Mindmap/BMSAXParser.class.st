@@ -46,8 +46,9 @@ BMSAXParser >> endDocument [
 { #category : #'handling - content' }
 BMSAXParser >> endElement: aQualifiedName [
 
-	aQualifiedName = 'text' ifTrue: [ self handleEndText ].
-	aQualifiedName = 'node' ifTrue: [ self handleEndNode ].
+	aQualifiedName = BMXMLTags text ifTrue: [ self handleEndText ].
+	aQualifiedName = BMXMLTags detail ifTrue: [  self handleEndDetail ].
+	aQualifiedName = BMXMLTags childNode ifTrue: [ self handleEndNode ].
 	aQualifiedName = BMXMLTags rootNode ifTrue: [ self handleEndRoot ].
 ]
 
@@ -66,13 +67,23 @@ BMSAXParser >> handleColor: anAttributeDictionary [
 	| color |
 	
 	color := Color 
-		r: (anAttributeDictionary at: 'red') asNumber
-		g: (anAttributeDictionary at: 'green') asNumber 
-		b: (anAttributeDictionary at: 'blue') asNumber 
-		alpha: (anAttributeDictionary at: 'alpha') asNumber.
+		r: (anAttributeDictionary at: BMXMLTags red) asNumber
+		g: (anAttributeDictionary at: BMXMLTags green) asNumber 
+		b: (anAttributeDictionary at: BMXMLTags blue) asNumber 
+		alpha: (anAttributeDictionary at: BMXMLTags alpha) asNumber.
 		
-	(anAttributeDictionary at: 'purpose') = 'foreground' ifTrue: [ self top model foreColor: color ].
-	(anAttributeDictionary at: 'purpose') = 'background' ifTrue: [  self top model backgroundColor: color ]
+	(anAttributeDictionary at: BMXMLTags purpose) = BMXMLTags foreground 
+		ifTrue: [ self top model foreColor: color ].
+		
+	(anAttributeDictionary at: BMXMLTags purpose) = BMXMLTags background 
+		ifTrue: [  self top model backgroundColor: color ]
+
+]
+
+{ #category : #'handling - content' }
+BMSAXParser >> handleEndDetail [
+	self top model details: stringBuilder.
+	self stringBuilder: ''.
 
 ]
 
@@ -130,11 +141,11 @@ BMSAXParser >> handleFont: anAttributeDictionary [
 	| font |
 	
 	font := LogicalFont 
-		familyName: (anAttributeDictionary at: 'familyName')
-		pointSize: (anAttributeDictionary at: 'pointSize') asNumber
-		stretchValue: (anAttributeDictionary at: 'stretchValue') asNumber
-		weightValue: (anAttributeDictionary at: 'weightValue') asNumber
-		slantValue: (anAttributeDictionary at: 'slantValue') asNumber.
+		familyName: (anAttributeDictionary at: BMXMLTags familyName)
+		pointSize: (anAttributeDictionary at: BMXMLTags pointSize) asNumber
+		stretchValue: (anAttributeDictionary at: BMXMLTags stretchValue) asNumber
+		weightValue: (anAttributeDictionary at: BMXMLTags weightValue) asNumber
+		slantValue: (anAttributeDictionary at: BMXMLTags slantValue) asNumber.
 		
 	self top model font: font
 	
@@ -197,7 +208,8 @@ BMSAXParser >> startElement: aQualifiedName attributes: anAttributeDictionary [
 	aQualifiedName = BMXMLTags childNode ifTrue: [ self handleChildNode ].
 	aQualifiedName = BMXMLTags color ifTrue: [ self handleColor: anAttributeDictionary ].
 	aQualifiedName = BMXMLTags font ifTrue: [ self handleFont: anAttributeDictionary ].
-	aQualifiedName = BMXMLTags text ifTrue: [ self stringBuilder: '' ]
+	aQualifiedName = BMXMLTags text ifTrue: [ self stringBuilder: '' ].
+	aQualifiedName = BMXMLTags detail ifTrue: [ self stringBuilder: '' ]
 
 	
 ]
