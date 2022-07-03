@@ -46,6 +46,8 @@ BMMainTopic >> createMenu [
 				add: 'Background Color...' target: box selector: #editBackgroundColor argument: #();
 				add: 'Font...' target: box selector: #editFont argument: #();
 				addLine;
+				add: 'Paste' target: box selector: #paste argument: #();
+				addLine;
 				add: 'Save...' target: box selector: #saveMap argument: #();
 				add: 'Open...' target: box selector: #openMap argument: #()
 		])

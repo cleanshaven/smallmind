@@ -66,6 +66,11 @@ BMTopic >> confirmDeleteChild [
 
 ]
 
+{ #category : #copying }
+BMTopic >> copy [
+	self toClipboard
+]
+
 { #category : #initialization }
 BMTopic >> createMenu [
 
@@ -79,8 +84,21 @@ BMTopic >> createMenu [
 				add: 'Color' target: box selector: #editColor argument: #();
 				add: 'Font' target: box selector: #editFont argument: #();
 				addLine;
+				add: 'Copy' target: box selector: #copy argument: #();
+				add: 'Cut' target: box selector: #cut argument: #();
+				add: 'Paste' target: box selector: #paste argument: #();
+				addLine;
 				add: 'Delete' target: box selector: #deleteNode argument: #()
 				 ])
+]
+
+{ #category : #private }
+BMTopic >> cut [ 
+	|canvas|
+	canvas := self canvas.
+	self toClipboard.
+	self model parent deleteChild: self.
+	canvas signalUpdate 
 ]
 
 { #category : #defaults }
@@ -107,9 +125,12 @@ BMTopic >> deleteChild: child [
 { #category : #removing }
 BMTopic >> deleteNode [
 
+	| canvas |
+	canvas := self canvas.
+	
 	self confirmDeleteChild  ifTrue: [ 
 		self model parent deleteChild: self.
-		self updateCanvas ]
+		canvas signalUpdate ]
 
 ]
 
@@ -255,6 +276,30 @@ BMTopic >> labelChanged: aString [
 	self adjustSize.
 	self updateCanvas
 
+]
+
+{ #category : #'menu messages' }
+BMTopic >> paste [
+
+	| parser |
+	
+	Transcript nextPutAll: self application class clipboard.
+	Transcript flush.
+	parser := BMClipboardParser on: self application class clipboard. 
+	parser canvas: self canvas.
+	parser parentNode: self.
+	parser parseDocument
+	
+	
+]
+
+{ #category : #'as yet unclassified' }
+BMTopic >> toClipboard [
+	| writer |
+	
+	writer := XMLWriter new.
+	self writeNode: writer.
+	self application class clipboard: writer asString
 ]
 
 { #category : #'private ' }

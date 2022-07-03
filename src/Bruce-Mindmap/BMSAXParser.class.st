@@ -91,6 +91,7 @@ BMSAXParser >> handleEndDetail [
 BMSAXParser >> handleEndNode [
 	| node line|
 	
+	[ 
 	node := self pop.
 	self top model children add: node.
 	node model parent: self top.
@@ -103,7 +104,7 @@ BMSAXParser >> handleEndNode [
 			from: node;
 			to: child;
 			controlPointsController: RSHorizontalCPAPController new.
-		self canvas add: line]
+		self canvas add: line]] on: CollectionIsEmpty do: [ ] 
 	
 	
 
