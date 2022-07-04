@@ -12,7 +12,7 @@ Class {
 BMClipboardParser >> endDocument [ 
    |line|
 	
-	parentNode model children add: lastNode.
+	"parentNode model children add: lastNode."
 	lastNode model parent: parentNode.
 	self canvas add: lastNode.
 	line := RSBezier  new.

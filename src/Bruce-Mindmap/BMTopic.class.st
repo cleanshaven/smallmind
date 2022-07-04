@@ -17,7 +17,6 @@ BMTopic >> addChild [
 		newNode := BMTopic new.
 		newNode model 
 			text: text;
-			font: nil;
 			foreColor: Color black;
 			parent: self.
 		self model children add: newNode.
@@ -169,13 +168,13 @@ BMTopic >> editColor [
 
 { #category : #actions }
 BMTopic >> editDetails [
-	| newText group detailsIcon iconShape|
+	| newText |
 	newText := self getDetail: self model details.
 	newText ifNotNil: [ 
 		self model details: newText.
 		newText isEmptyOrNil 
 			ifTrue: [ self model removeIcon: #detailIcon ] 
-			ifFalse: [self model addIcon: #detailIcon. self model addIcon: #bitbucket] ]
+			ifFalse: [self model addIcon: #detailIcon] ]
 
 	
   
@@ -272,9 +271,10 @@ BMTopic >> initialize [
 	self model when: BMAnnounceFontChanged  do: [ :announcement | self fontChanged: announcement newData ].
 	self model when: BMAnnounceForeColorChanged do: [ :announcement | self foreColorChanged: announcement newData ]."
 	self model when: BMModelChanged do: [ :announcement | self modelChanged: announcement newData ].
-	self color: Color red.
+	self color: Color transparent.
 	self label: RSLabel new.
 	self add: label.
+	
 	self extent: (self label textWidth@self label textHeight).
 	self model foreColor: self defaultForeColor.
 	self model font: self label font.
@@ -377,6 +377,20 @@ BMTopic >> writeAdditionalTagsTo: writer [
 ]
 
 { #category : #writing }
+BMTopic >> writeIcon: icon to: writer [
+	| attributes |
+	
+	attributes := Dictionary with: 'name'->icon asString.
+	writer tag: 'icon' attributes: attributes
+]
+
+{ #category : #writing }
+BMTopic >> writeIcons: writer [
+
+	self model icons do: [ :icon | self writeIcon: icon to: writer ]
+]
+
+{ #category : #writing }
 BMTopic >> writeNode: writer [
 
 	writer tag: self xmlNodeName with: [ 
@@ -384,6 +398,7 @@ BMTopic >> writeNode: writer [
 		self model details isEmptyOrNil ifFalse:[writer tag: 'detail' with: self model details].
 		self model font bmWriteXMLTo: writer.
 		self model foreColor bmWriteXMLTo: writer purpose: 'foreground'.
+		self writeIcons: writer.
 		self writeAdditionalTagsTo: writer. 
 		self model children do: [ :node | node writeNode: writer ]]
 

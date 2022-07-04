@@ -87,7 +87,7 @@ BMSAXParser >> handleEndDetail [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'handling - content' }
 BMSAXParser >> handleEndNode [
 	| node line|
 	
@@ -153,6 +153,12 @@ BMSAXParser >> handleFont: anAttributeDictionary [
 ]
 
 { #category : #'handling - content' }
+BMSAXParser >> handleIcon: anAttributeDictionary [
+	self top model addIcon: (anAttributeDictionary at: 'name') asSymbol  
+
+]
+
+{ #category : #'handling - content' }
 BMSAXParser >> handleRootNode [
 	| rootNode |
 	
@@ -210,7 +216,8 @@ BMSAXParser >> startElement: aQualifiedName attributes: anAttributeDictionary [
 	aQualifiedName = BMXMLTags color ifTrue: [ self handleColor: anAttributeDictionary ].
 	aQualifiedName = BMXMLTags font ifTrue: [ self handleFont: anAttributeDictionary ].
 	aQualifiedName = BMXMLTags text ifTrue: [ self stringBuilder: '' ].
-	aQualifiedName = BMXMLTags detail ifTrue: [ self stringBuilder: '' ]
+	aQualifiedName = BMXMLTags detail ifTrue: [ self stringBuilder: '' ].
+	aQualifiedName = 'icon' ifTrue: [ self handleIcon: anAttributeDictionary ]
 
 	
 ]

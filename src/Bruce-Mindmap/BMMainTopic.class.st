@@ -84,6 +84,20 @@ BMMainTopic >> initialize [
 
 ]
 
+{ #category : #'announcement handling' }
+BMMainTopic >> modelChanged: aModel [
+	| aCircle |
+	super modelChanged: aModel.
+	
+	self extent: (self extent x + 5)@(self extent x + 5).
+	aCircle := (RSCircle new extent: self extent; yourself).
+	self add: aCircle.
+	aCircle pushBack
+	
+		
+
+]
+
 { #category : #actions }
 BMMainTopic >> openMap [
 
