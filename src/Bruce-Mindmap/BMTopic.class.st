@@ -37,6 +37,26 @@ BMTopic >> addChild [
 
 ]
 
+{ #category : #adding }
+BMTopic >> addIcon [ 
+	| selection list |
+	
+	list := ThemeIcons current icons associations collect: [ :each | each ] thenReject: [ :each |
+		each key asSymbol = #detailIcon ].
+	
+	selection := self application newSelect
+		title: 'Choose Icon';
+		label: 'Select an Icon';
+		items: list;
+		display: [ :each | each key ];
+		displayIcon: [ :each | each value ];
+		openModal.
+		
+	selection ifNotNil: [ 
+		self model addIcon: selection key asSymbol ]
+
+]
+
 { #category : #'menu messages' }
 BMTopic >> addSibling [
 	self model parent addChild
@@ -83,6 +103,14 @@ BMTopic >> copy [
 	self toClipboard
 ]
 
+{ #category : #'as yet unclassified' }
+BMTopic >> createIconList [
+	
+	^self model icons collect: [ :each || icon |
+		icon := ThemeIcons current icons at: each.
+		each->icon] thenReject: [ :each | each key asSymbol = #detailIcon ]
+]
+
 { #category : #initialization }
 BMTopic >> createMenu [
 
@@ -95,6 +123,9 @@ BMTopic >> createMenu [
 				add: 'Details' target: box selector: #editDetails argument: #();
 				add: 'Color' target: box selector: #editColor argument: #();
 				add: 'Font' target: box selector: #editFont argument: #();
+				addLine;
+				add: 'Add Icon' target: box selector: #addIcon argument: #();
+				add: 'Remove Icon' target: box selector: #removeIcon argument: #();
 				addLine;
 				add: 'Copy' target: box selector: #copy argument: #();
 				add: 'Cut' target: box selector: #cut argument: #();
@@ -308,6 +339,7 @@ BMTopic >> labelChanged: aString [
 BMTopic >> modelChanged: aModel [
 
 	| totalExtent count startingPoint iconForm newIconShape myLabel |
+	
 	self resetChildren.
 	aModel font ifNotNil: [ self label font: aModel font ].
 	myLabel := self label.
@@ -333,7 +365,7 @@ BMTopic >> modelChanged: aModel [
 		startingPoint := startingPoint + 8 ].
 	self add: self label.
 	
-	aModel icons size = 0 
+	aModel icons isEmpty
 		ifTrue: [self label translateTo: 0@0]
 		ifFalse: [ self label translateTo: (aModel icons size * 8) - (aModel icons size * 4) @ 0 ].
 		self label pushFront.
@@ -353,6 +385,25 @@ BMTopic >> paste [
 		parseDocument
 	
 	
+]
+
+{ #category : #removing }
+BMTopic >> removeIcon [
+	| iconList selection |
+	iconList := self createIconList.
+	
+	selection := self application newSelect
+		title: 'Remove Icon';
+		label: 'Select Icon to Remove';
+		items: iconList;
+		display: [ :each | each key ];
+		displayIcon: [ :each | each value ];
+		openModal.
+		
+	selection ifNotNil: [ 
+		self model removeIcon: selection key asSymbol 
+	]
+		
 ]
 
 { #category : #clipboard }

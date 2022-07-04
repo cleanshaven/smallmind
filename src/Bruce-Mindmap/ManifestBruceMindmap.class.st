@@ -9,7 +9,7 @@ Class {
 
 { #category : #'code-critics' }
 ManifestBruceMindmap class >> ruleCollectionProtocolRuleV1FalsePositive [
-	^ #(#(#(#RGMethodDefinition #(#BMClipboardParser #endDocument #false)) #'2022-07-03T09:12:29.641519-04:00') #(#(#RGMethodDefinition #(#BMClipboardParser #handleEndNode #false)) #'2022-07-03T09:31:49.653447-04:00') )
+	^ #(#(#(#RGMethodDefinition #(#BMClipboardParser #endDocument #false)) #'2022-07-03T09:12:29.641519-04:00') #(#(#RGMethodDefinition #(#BMClipboardParser #handleEndNode #false)) #'2022-07-03T09:31:49.653447-04:00') #(#(#RGMethodDefinition #(#BMTopic #modelChanged: #false)) #'2022-07-04T16:05:34.414914-04:00') )
 ]
 
 { #category : #'code-critics' }
