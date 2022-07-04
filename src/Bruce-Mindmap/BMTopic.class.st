@@ -2,12 +2,13 @@ Class {
 	#name : #BMTopic,
 	#superclass : #RSComposite,
 	#instVars : [
-		'label'
+		'label',
+		'detailIcon'
 	],
 	#category : #'Bruce-Mindmap-roassal'
 }
 
-{ #category : #adding }
+{ #category : #'menu messages' }
 BMTopic >> addChild [
 	| text newNode line|
 	
@@ -16,6 +17,8 @@ BMTopic >> addChild [
 		newNode := BMTopic new.
 		newNode model 
 			text: text;
+			font: nil;
+			foreColor: Color black;
 			parent: self.
 		self model children add: newNode.
 		self canvas add: newNode.
@@ -35,7 +38,7 @@ BMTopic >> addChild [
 
 ]
 
-{ #category : #adding }
+{ #category : #'menu messages' }
 BMTopic >> addSibling [
 	self model parent addChild
 
@@ -53,6 +56,16 @@ BMTopic >> application [
 	^self canvas application
 ]
 
+{ #category : #clipboard }
+BMTopic >> clipboard [ 
+	^self application class clipboard
+]
+
+{ #category : #clipboard }
+BMTopic >> clipboard: aString [
+	^self application class clipboard: aString
+]
+
 { #category : #removing }
 BMTopic >> confirmDeleteChild [
 
@@ -66,7 +79,7 @@ BMTopic >> confirmDeleteChild [
 
 ]
 
-{ #category : #copying }
+{ #category : #'menu messages' }
 BMTopic >> copy [
 	self toClipboard
 ]
@@ -92,7 +105,7 @@ BMTopic >> createMenu [
 				 ])
 ]
 
-{ #category : #private }
+{ #category : #'menu messages' }
 BMTopic >> cut [ 
 	|canvas|
 	canvas := self canvas.
@@ -134,7 +147,19 @@ BMTopic >> deleteNode [
 
 ]
 
-{ #category : #'trait rendering' }
+{ #category : #accessing }
+BMTopic >> detailIcon [
+
+	^ detailIcon
+]
+
+{ #category : #accessing }
+BMTopic >> detailIcon: anObject [
+
+	detailIcon := anObject
+]
+
+{ #category : #'menu messages' }
 BMTopic >> editColor [ 
 	| color |
 	
@@ -143,22 +168,21 @@ BMTopic >> editColor [
 ]
 
 { #category : #actions }
-BMTopic >> editDetail [
-	| newText |
-	newText := self getDetail: self model detail.
-	newText ifNotNil: [ self model details: newText ]
-
-]
-
-{ #category : #actions }
 BMTopic >> editDetails [
-	| newText |
+	| newText group detailsIcon iconShape|
 	newText := self getDetail: self model details.
-	newText ifNotNil: [ self model details: newText ]
+	newText ifNotNil: [ 
+		self model details: newText.
+		newText isEmptyOrNil 
+			ifTrue: [ self model removeIcon: #detailIcon ] 
+			ifFalse: [self model addIcon: #detailIcon. self model addIcon: #bitbucket] ]
+
+	
+  
 
 ]
 
-{ #category : #actions }
+{ #category : #'menu messages' }
 BMTopic >> editFont [
 
 	| newFont |
@@ -168,7 +192,7 @@ BMTopic >> editFont [
 
 ]
 
-{ #category : #actions }
+{ #category : #'menu messages' }
 BMTopic >> editText [
 	| newText |
 	newText := self getText: self model text.
@@ -244,12 +268,14 @@ BMTopic >> getText: initialText [
 BMTopic >> initialize [ 
 	super initialize.
 	self model: BMNode new.
-	self model when: BMAnnounceTextChanged do: [ :announcement | self labelChanged: announcement newData ].
+"	self model when: BMAnnounceTextChanged do: [ :announcement | self labelChanged: announcement newData ].
 	self model when: BMAnnounceFontChanged  do: [ :announcement | self fontChanged: announcement newData ].
-	self model when: BMAnnounceForeColorChanged do: [ :announcement | self foreColorChanged: announcement newData ].
-	self color: Color transparent.
+	self model when: BMAnnounceForeColorChanged do: [ :announcement | self foreColorChanged: announcement newData ]."
+	self model when: BMModelChanged do: [ :announcement | self modelChanged: announcement newData ].
+	self color: Color red.
 	self label: RSLabel new.
 	self add: label.
+	self extent: (self label textWidth@self label textHeight).
 	self model foreColor: self defaultForeColor.
 	self model font: self label font.
 
@@ -278,28 +304,66 @@ BMTopic >> labelChanged: aString [
 
 ]
 
+{ #category : #'announcement handling' }
+BMTopic >> modelChanged: aModel [
+
+	| totalExtent count startingPoint iconForm newIconShape myLabel |
+	self resetChildren.
+	aModel font ifNotNil: [ self label font: aModel font ].
+	myLabel := self label.
+	myLabel
+		color: aModel foreColor;
+		model: aModel text;
+		text: aModel text.
+	totalExtent := 8 * aModel icons size + self label extent x
+	        @ (self label extent y max: 8).
+	self extent: totalExtent.
+	startingPoint := ((self extent x / 2) * -1) + 4.
+	count := 1.
+	aModel icons do: [ :icon | 
+		| iconShape |
+		iconForm := self iconNamed: icon.
+		iconShape := RSBitmap new.
+		iconShape
+			form: iconForm;
+			extent: 8 @ 8.
+		newIconShape := iconShape yourself.
+		self add: newIconShape.
+		newIconShape translateTo: startingPoint @ 0.
+		startingPoint := startingPoint + 8 ].
+	self add: self label.
+	
+	aModel icons size = 0 
+		ifTrue: [self label translateTo: 0@0]
+		ifFalse: [ self label translateTo: (aModel icons size * 8) - (aModel icons size * 4) @ 0 ].
+		self label pushFront.
+
+	self updateCanvas
+]
+
 { #category : #'menu messages' }
 BMTopic >> paste [
 
 	| parser |
 	
-	Transcript nextPutAll: self application class clipboard.
-	Transcript flush.
-	parser := BMClipboardParser on: self application class clipboard. 
-	parser canvas: self canvas.
-	parser parentNode: self.
-	parser parseDocument
+	parser := BMClipboardParser on: self clipboard. 
+	parser 
+		canvas: self canvas;
+		parentNode: self;
+		parseDocument
 	
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #clipboard }
 BMTopic >> toClipboard [
 	| writer |
 	
 	writer := XMLWriter new.
-	self writeNode: writer.
-	self application class clipboard: writer asString
+	self 
+		writeNode: writer;
+		clipboard: writer asString
+
 ]
 
 { #category : #'private ' }

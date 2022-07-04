@@ -2,7 +2,8 @@ Class {
 	#name : #BMApplication,
 	#superclass : #SpApplication,
 	#classInstVars : [
-		'clipboard'
+		'clipboard',
+		'icons'
 	],
 	#category : #'Bruce-Mindmap-spec'
 }
@@ -17,6 +18,32 @@ BMApplication class >> clipboard [
 BMApplication class >> clipboard: anObject [
 
 	clipboard := anObject
+]
+
+{ #category : #accessing }
+BMApplication class >> icons [
+
+	^ icons
+]
+
+{ #category : #accessing }
+BMApplication class >> icons: anObject [
+
+	icons := anObject
+]
+
+{ #category : #initialization }
+BMApplication class >> initialize [
+	| stream themeIcons|
+	
+	themeIcons := ThemeIcons current.
+	stream := '/home/bruce/Pictures/note.png' asFileReference.
+	themeIcons icons at: #detailIcon put: (themeIcons readPNGFrom: stream).
+
+	
+	
+	
+
 ]
 
 { #category : #accessing }

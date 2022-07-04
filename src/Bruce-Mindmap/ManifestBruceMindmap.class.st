@@ -11,3 +11,8 @@ Class {
 ManifestBruceMindmap class >> ruleCollectionProtocolRuleV1FalsePositive [
 	^ #(#(#(#RGMethodDefinition #(#BMClipboardParser #endDocument #false)) #'2022-07-03T09:12:29.641519-04:00') #(#(#RGMethodDefinition #(#BMClipboardParser #handleEndNode #false)) #'2022-07-03T09:31:49.653447-04:00') )
 ]
+
+{ #category : #'code-critics' }
+ManifestBruceMindmap class >> ruleReGuardClauseRuleV1FalsePositive [
+	^ #(#(#(#RGMethodDefinition #(#BMNode #addIcon: #false)) #'2022-07-04T09:32:57.763835-04:00') )
+]

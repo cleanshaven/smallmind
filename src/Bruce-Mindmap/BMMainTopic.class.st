@@ -80,7 +80,7 @@ BMMainTopic >> initialize [
 	self model text: 'My Mind'.
 	self model backgroundColor: self defaultBackgroundColor.
 	self model when: BMAnnounceBackgroundColorChanged do: [ :annoucement |  self backgroundColorChanged: annoucement newData].
-	self label pushFront.
+	"self label pushFront."
 
 ]
 

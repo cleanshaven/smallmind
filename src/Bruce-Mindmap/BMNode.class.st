@@ -9,10 +9,21 @@ Class {
 		'children',
 		'parent',
 		'announcer',
-		'details'
+		'details',
+		'icons'
 	],
 	#category : #'Bruce-Mindmap-model'
 }
+
+{ #category : #accessing }
+BMNode >> addIcon: aSymbol [
+
+	(self icons findFirst: [:each | each = aSymbol]) = 0
+		ifTrue: [ 
+			self icons add: aSymbol.
+			self announce: (BMModelChanged new newData: self; yourself)
+		]
+]
 
 { #category : #announcer }
 BMNode >> announce: anAnnouncement [
@@ -44,7 +55,7 @@ BMNode >> backgroundColor [
 BMNode >> backgroundColor: anObject [
 
 	backgroundColor := anObject.
-	self announce: (BMAnnounceBackgroundColorChanged new newData: anObject; yourself)
+	self announce: (BMModelChanged new newData: self; yourself)
 ]
 
 { #category : #accessing }
@@ -68,7 +79,12 @@ BMNode >> details [
 { #category : #accessing }
 BMNode >> details: anObject [
 
-	details := anObject
+	details := anObject.
+	details isEmptyOrNil 
+		ifTrue: [ self removeIcon: #detailIcon ]
+		ifFalse: [ self addIcon: #detailIcon ]
+
+	
 ]
 
 { #category : #accessing }
@@ -81,7 +97,7 @@ BMNode >> font [
 BMNode >> font: anObject [
 
 	font := anObject.
-	self announce: (BMAnnounceFontChanged new newData: anObject; yourself)
+	self announce: (BMModelChanged new newData: self; yourself)
 ]
 
 { #category : #accessing }
@@ -94,7 +110,19 @@ BMNode >> foreColor [
 BMNode >> foreColor: anObject [
 
 	foreColor := anObject.
-	self announce: (BMAnnounceForeColorChanged new newData: anObject; yourself)
+	self announce: (BMModelChanged new newData: self; yourself)
+]
+
+{ #category : #accessing }
+BMNode >> icons [
+
+	^ icons
+]
+
+{ #category : #accessing }
+BMNode >> icons: anObject [
+
+	icons := anObject
 ]
 
 { #category : #initialization }
@@ -102,6 +130,8 @@ BMNode >> initialize [
 	super initialize.
 	self children: OrderedCollection new.
 	self announcer: Announcer new.
+	self icons: OrderedCollection new.
+
 	self details: ''
 
 ]
@@ -125,6 +155,12 @@ BMNode >> parentModel [
 ]
 
 { #category : #accessing }
+BMNode >> removeIcon: aSymbol [
+	self icons remove: aSymbol ifAbsent: [ ^self ].
+	self announce: (BMModelChanged new newData: self; yourself)
+]
+
+{ #category : #accessing }
 BMNode >> text [
 
 	^ text
@@ -134,7 +170,7 @@ BMNode >> text [
 BMNode >> text: anObject [
 
 	text := anObject.
-	self announce: (BMAnnounceTextChanged new newData: anObject; yourself)
+	self announce: (BMModelChanged new newData: self; yourself)
 ]
 
 { #category : #announcer }
