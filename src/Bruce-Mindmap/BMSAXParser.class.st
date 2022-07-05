@@ -154,7 +154,7 @@ BMSAXParser >> handleFont: anAttributeDictionary [
 
 { #category : #'handling - content' }
 BMSAXParser >> handleIcon: anAttributeDictionary [
-	self top model addIcon: (anAttributeDictionary at: 'name') asSymbol  
+	self top model addIcon: (anAttributeDictionary at: BMXMLTags iconAttribute) asSymbol  
 
 ]
 
@@ -217,7 +217,7 @@ BMSAXParser >> startElement: aQualifiedName attributes: anAttributeDictionary [
 	aQualifiedName = BMXMLTags font ifTrue: [ self handleFont: anAttributeDictionary ].
 	aQualifiedName = BMXMLTags text ifTrue: [ self stringBuilder: '' ].
 	aQualifiedName = BMXMLTags detail ifTrue: [ self stringBuilder: '' ].
-	aQualifiedName = 'icon' ifTrue: [ self handleIcon: anAttributeDictionary ]
+	aQualifiedName = BMXMLTags icon ifTrue: [ self handleIcon: anAttributeDictionary ]
 
 	
 ]

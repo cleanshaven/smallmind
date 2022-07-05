@@ -61,6 +61,16 @@ BMXMLTags class >> green [
 ]
 
 { #category : #constants }
+BMXMLTags class >> icon [
+	^'icon'
+]
+
+{ #category : #constants }
+BMXMLTags class >> iconAttribute [
+	^name
+]
+
+{ #category : #constants }
 BMXMLTags class >> mindmap [
 	^'mindmap'
 

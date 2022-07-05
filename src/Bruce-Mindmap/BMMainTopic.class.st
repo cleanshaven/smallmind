@@ -38,20 +38,22 @@ BMMainTopic >> createMenu [
 	self @ (RSMenuActivable new
 		menuDo: [ :menu :box | 
 			menu 
-				add: 'Add Child...' target: box selector: #addChild argument: #();
-				add: 'Edit...' target: box selector: #editText argument: #();
-								add: 'Details' target: box selector: #editDetails argument: #();
+				add: BMMenuConstants addChild target: box selector: #addChild argument: #();
+				add: BMMenuConstants edit target: box selector: #editText argument: #();
+				add: BMMenuConstants details target: box selector: #editDetails argument: #();
 
-				add: 'Color...' target: box selector: #editColor argument: #();
-				add: 'Background Color...' target: box selector: #editBackgroundColor argument: #();
-				add: 'Font...' target: box selector: #editFont argument: #();
+				add: BMMenuConstants color target: box selector: #editColor argument: #();
+
+				add: BMMenuConstants backgroundColor target: box selector: #editBackgroundColor argument: #();
+				add: BMMenuConstants font target: box selector: #editFont argument: #();
 				addLine;
-				add: 'Add Icon' target: box selector: #addIcon argument: #();
+				add: BMMenuConstants addIcon target: box selector: #addIcon argument: #();
+				add: BMMenuConstants removeIcon target: box selector: #removeIcon argument: #();
 				addLine;
-				add: 'Paste' target: box selector: #paste argument: #();
+				add: BMMenuConstants paste target: box selector: #paste argument: #();
 				addLine;
-				add: 'Save...' target: box selector: #saveMap argument: #();
-				add: 'Open...' target: box selector: #openMap argument: #()
+				add: BMMenuConstants save target: box selector: #saveMap argument: #();
+				add: BMMenuConstants open target: box selector: #openMap argument: #()
 		])
 ]
 

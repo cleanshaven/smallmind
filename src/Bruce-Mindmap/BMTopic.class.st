@@ -41,13 +41,13 @@ BMTopic >> addChild [
 BMTopic >> addIcon [ 
 	| selection list |
 	
-	list := ThemeIcons current icons associations collect: [ :each | each ] thenReject: [ :each |
-		each key asSymbol = #detailIcon ].
+	list := (ThemeIcons current icons associations collect: [ :each | each ] thenReject: [ :each |
+		each key asSymbol = #detailIcon ]) sorted: [:a :b | a < b ].
 	
 	selection := self application newSelect
 		title: 'Choose Icon';
 		label: 'Select an Icon';
-		items: list;
+    	items: list;
 		display: [ :each | each key ];
 		displayIcon: [ :each | each value ];
 		openModal.
@@ -103,7 +103,7 @@ BMTopic >> copy [
 	self toClipboard
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private ' }
 BMTopic >> createIconList [
 	
 	^self model icons collect: [ :each || icon |
@@ -117,21 +117,21 @@ BMTopic >> createMenu [
 	self @ (RSMenuActivable new
 		menuDo: [ :menu :box | 
 			menu 
-				add: 'Add Child' target: box selector: #addChild argument: #();
-				add: 'AddSibling' target: box selector: #addSibling argument: #();
-				add: 'Edit' target: box selector: #editText argument: #();
-				add: 'Details' target: box selector: #editDetails argument: #();
-				add: 'Color' target: box selector: #editColor argument: #();
-				add: 'Font' target: box selector: #editFont argument: #();
+				add: BMMenuConstants addChild target: box selector: #addChild argument: #();
+				add: BMMenuConstants addSibling target: box selector: #addSibling argument: #();
+				add: BMMenuConstants edit target: box selector: #editText argument: #();
+				add: BMMenuConstants details  target: box selector: #editDetails argument: #();
+				add: BMMenuConstants color target: box selector: #editColor argument: #();
+				add: BMMenuConstants font target: box selector: #editFont argument: #();
 				addLine;
-				add: 'Add Icon' target: box selector: #addIcon argument: #();
-				add: 'Remove Icon' target: box selector: #removeIcon argument: #();
+				add: BMMenuConstants addIcon target: box selector: #addIcon argument: #();
+				add: BMMenuConstants removeIcon target: box selector: #removeIcon argument: #();
 				addLine;
-				add: 'Copy' target: box selector: #copy argument: #();
-				add: 'Cut' target: box selector: #cut argument: #();
-				add: 'Paste' target: box selector: #paste argument: #();
+				add: BMMenuConstants copyNode target: box selector: #copy argument: #();
+				add: BMMenuConstants cut target: box selector: #cut argument: #();
+				add: BMMenuConstants paste target: box selector: #paste argument: #();
 				addLine;
-				add: 'Delete' target: box selector: #deleteNode argument: #()
+				add: BMMenuConstants delete target: box selector: #deleteNode argument: #()
 				 ])
 ]
 
@@ -431,8 +431,8 @@ BMTopic >> writeAdditionalTagsTo: writer [
 BMTopic >> writeIcon: icon to: writer [
 	| attributes |
 	
-	attributes := Dictionary with: 'name'->icon asString.
-	writer tag: 'icon' attributes: attributes
+	attributes := Dictionary with: BMXMLTags iconAttribute->icon asString.
+	writer tag: BMXMLTags icon attributes: attributes
 ]
 
 { #category : #writing }
