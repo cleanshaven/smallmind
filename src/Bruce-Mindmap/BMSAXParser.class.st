@@ -50,6 +50,7 @@ BMSAXParser >> endElement: aQualifiedName [
 	aQualifiedName = BMXMLTags detail ifTrue: [  self handleEndDetail ].
 	aQualifiedName = BMXMLTags childNode ifTrue: [ self handleEndNode ].
 	aQualifiedName = BMXMLTags rootNode ifTrue: [ self handleEndRoot ].
+	aQualifiedName = 'link' ifTrue: [ self handleEndLink ]
 ]
 
 { #category : #'handling - content' }
@@ -85,6 +86,14 @@ BMSAXParser >> handleEndDetail [
 	self top model details: stringBuilder.
 	self stringBuilder: ''.
 
+]
+
+{ #category : #'handling - content' }
+BMSAXParser >> handleEndLink [
+	self top model link: self stringBuilder.
+	self stringBuilder: ''
+	
+	
 ]
 
 { #category : #'handling - content' }
@@ -217,6 +226,7 @@ BMSAXParser >> startElement: aQualifiedName attributes: anAttributeDictionary [
 	aQualifiedName = BMXMLTags font ifTrue: [ self handleFont: anAttributeDictionary ].
 	aQualifiedName = BMXMLTags text ifTrue: [ self stringBuilder: '' ].
 	aQualifiedName = BMXMLTags detail ifTrue: [ self stringBuilder: '' ].
+	aQualifiedName = 'link' ifTrue: [ self stringBuilder: '' ].
 	aQualifiedName = BMXMLTags icon ifTrue: [ self handleIcon: anAttributeDictionary ]
 
 	

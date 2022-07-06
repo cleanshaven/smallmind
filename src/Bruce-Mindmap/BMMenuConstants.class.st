@@ -59,6 +59,11 @@ BMMenuConstants class >> font [
 	^'Font' 
 ]
 
+{ #category : #accessing }
+BMMenuConstants class >> link [
+	^'Link' 
+]
+
 { #category : #adding }
 BMMenuConstants class >> open [
 	^'Open'

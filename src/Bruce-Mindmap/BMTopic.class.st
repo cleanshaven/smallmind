@@ -41,8 +41,8 @@ BMTopic >> addChild [
 BMTopic >> addIcon [ 
 	| selection list |
 	
-	list := (ThemeIcons current icons associations collect: [ :each | each ] thenReject: [ :each |
-		each key asSymbol = #detailIcon ]) sorted: [:a :b | a < b ].
+	list := (ThemeIcons current icons associations reject: [ :each |
+		self doNotDisplayIcons includes: each key asSymbol]) sorted: [:a :b | a < b ].
 	
 	selection := self application newSelect
 		title: 'Choose Icon';
@@ -108,7 +108,7 @@ BMTopic >> createIconList [
 	
 	^self model icons collect: [ :each || icon |
 		icon := ThemeIcons current icons at: each.
-		each->icon] thenReject: [ :each | each key asSymbol = #detailIcon ]
+		each->icon] thenReject: [ :each | self doNotDisplayIcons includes: each key asSymbol ]
 ]
 
 { #category : #initialization }
@@ -121,6 +121,7 @@ BMTopic >> createMenu [
 				add: BMMenuConstants addSibling target: box selector: #addSibling argument: #();
 				add: BMMenuConstants edit target: box selector: #editText argument: #();
 				add: BMMenuConstants details  target: box selector: #editDetails argument: #();
+				add: BMMenuConstants link target: box selector: #editLink argument: #();
 				add: BMMenuConstants color target: box selector: #editColor argument: #();
 				add: BMMenuConstants font target: box selector: #editFont argument: #();
 				addLine;
@@ -189,6 +190,11 @@ BMTopic >> detailIcon: anObject [
 	detailIcon := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+BMTopic >> doNotDisplayIcons [
+	^#(#detailIcon #weblinkIcon) asOrderedCollection
+]
+
 { #category : #'menu messages' }
 BMTopic >> editColor [ 
 	| color |
@@ -219,6 +225,19 @@ BMTopic >> editFont [
 	
 	newFont := self getFont: self model font.
 	newFont ifNotNil: [ self model font: newFont ]
+
+]
+
+{ #category : #'menu messages' }
+BMTopic >> editLink [
+	| newLink |
+	newLink := self getLink: self model link.
+	newLink ifNotNil: [ 
+		self model link: newLink.
+		self model link isEmptyOrNil 
+			ifTrue: [ self model removeIcon: #weblinkIcon ] 
+			ifFalse: [self model addIcon: #weblinkIcon]].
+	
 
 ]
 
@@ -284,6 +303,17 @@ BMTopic >> getFont: initialFont [
 ]
 
 { #category : #utilities }
+BMTopic >> getLink: initialText [
+	
+	
+	^self application newRequest
+		title: 'Link';
+		label: 'Link';
+		text: initialText;
+		openModal. 
+]
+
+{ #category : #utilities }
 BMTopic >> getText: initialText [
 	
 	
@@ -292,6 +322,13 @@ BMTopic >> getText: initialText [
 		label: 'Text';
 		text: initialText;
 		openModal. 
+]
+
+{ #category : #'as yet unclassified' }
+BMTopic >> gotoLink: aString [
+
+	aString isEmptyOrNil ifFalse: [ WebBrowser openOn: aString ]
+	
 ]
 
 { #category : #initialization }
@@ -312,6 +349,7 @@ BMTopic >> initialize [
 
 	self draggable.
 	self createMenu.
+	self when: RSMouseDoubleLeftClick do: [ :evt | self gotoLink: self model link ]
 
 ]
 
@@ -447,6 +485,7 @@ BMTopic >> writeNode: writer [
 	writer tag: self xmlNodeName with: [ 
 		writer tag: BMXMLTags text with: self model text.
 		self model details isEmptyOrNil ifFalse:[writer tag: 'detail' with: self model details].
+		self model link isEmptyOrNil ifFalse: [ writer tag: 'link' with: self model link ].
 		self model font bmWriteXMLTo: writer.
 		self model foreColor bmWriteXMLTo: writer purpose: 'foreground'.
 		self writeIcons: writer.

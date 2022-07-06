@@ -10,7 +10,8 @@ Class {
 		'parent',
 		'announcer',
 		'details',
-		'icons'
+		'icons',
+		'link'
 	],
 	#category : #'Bruce-Mindmap-model'
 }
@@ -134,6 +135,18 @@ BMNode >> initialize [
 
 	self details: ''
 
+]
+
+{ #category : #accessing }
+BMNode >> link [
+
+	^ link
+]
+
+{ #category : #accessing }
+BMNode >> link: anObject [
+
+	link := anObject
 ]
 
 { #category : #accessing }

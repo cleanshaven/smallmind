@@ -39,6 +39,8 @@ BMApplication class >> initialize [
 	themeIcons := ThemeIcons current.
 	stream := '/home/bruce/Pictures/note.png' asFileReference.
 	themeIcons icons at: #detailIcon put: (themeIcons readPNGFrom: stream).
+	stream := '/home/bruce/Pictures/weblink.png' asFileReference.
+	themeIcons icons at: #weblinkIcon put: (themeIcons readPNGFrom: stream).
 
 	
 	

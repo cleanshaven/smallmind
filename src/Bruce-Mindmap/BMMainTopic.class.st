@@ -41,6 +41,7 @@ BMMainTopic >> createMenu [
 				add: BMMenuConstants addChild target: box selector: #addChild argument: #();
 				add: BMMenuConstants edit target: box selector: #editText argument: #();
 				add: BMMenuConstants details target: box selector: #editDetails argument: #();
+				add: BMMenuConstants link target: box selector: #editLink argument: #();
 
 				add: BMMenuConstants color target: box selector: #editColor argument: #();
 
