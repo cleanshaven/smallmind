@@ -15,6 +15,11 @@ BMMenuConstants class >> addIcon [
 ]
 
 { #category : #adding }
+BMMenuConstants class >> addImage [
+	^'Add Image'
+]
+
+{ #category : #adding }
 BMMenuConstants class >> addSibling [ 
 	^'Add Sibling'
 ]
@@ -77,6 +82,11 @@ BMMenuConstants class >> paste [
 { #category : #adding }
 BMMenuConstants class >> removeIcon [ 
 	^'Remove Icon'
+]
+
+{ #category : #adding }
+BMMenuConstants class >> removeImage [
+	^'Remove Image'
 ]
 
 { #category : #adding }

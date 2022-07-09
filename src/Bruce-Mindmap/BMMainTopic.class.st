@@ -33,6 +33,15 @@ BMMainTopic >> circle: anObject [
 	circle := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+BMMainTopic >> createFileMenu: box [
+	^MenuMorph new
+		add: BMMenuConstants save target: box selector: #saveMap argument: #();
+		add: BMMenuConstants open target: box selector: #openMap argument: #();
+		yourself
+		
+]
+
 { #category : #initialization }
 BMMainTopic >> createMenu [
 	self @ (RSMenuActivable new
@@ -53,9 +62,10 @@ BMMainTopic >> createMenu [
 				addLine;
 				add: BMMenuConstants paste target: box selector: #paste argument: #();
 				addLine;
-				add: BMMenuConstants save target: box selector: #saveMap argument: #();
-				add: BMMenuConstants open target: box selector: #openMap argument: #()
-		])
+				add: BMMenuConstants addImage target: box selector: #addImage argument: #();
+				add: BMMenuConstants removeImage target: box selector: #removeImage argument: #();
+				addLine;
+				add: 'File' subMenu: (self createFileMenu: box)])
 ]
 
 { #category : #defaults }
@@ -93,9 +103,11 @@ BMMainTopic >> initialize [
 BMMainTopic >> modelChanged: aModel [
 	| aCircle |
 	super modelChanged: aModel.
-	
-	self extent: (self extent x + 5)@(self extent x + 5).
-	aCircle := (RSCircle new extent: self extent; yourself).
+	aCircle := RSCircle new.
+	self extent: (self model image isEmptyOrNil 
+							ifTrue: [(self extent x + 5)@(self extent x + 5)]
+							ifFalse: [ ((self extent x + 5)min:64 + 5)@((self extent x + 5 )min:64 + 5) ] ).
+	aCircle extent: self extent.
 	self add: aCircle.
 	aCircle pushBack
 	

@@ -57,6 +57,19 @@ BMTopic >> addIcon [
 
 ]
 
+{ #category : #adding }
+BMTopic >> addImage [ 
+
+	| fileName base64|
+	fileName := UIManager default chooseFullFileNameMatching: #('*.png').
+	fileName ifNotNil: [ 
+		base64 := (Base64MimeConverter mimeEncode: fileName asFileReference binaryReadStream) contents.
+		self model image: base64.
+	]	
+
+	
+]
+
 { #category : #'menu messages' }
 BMTopic >> addSibling [
 	self model parent addChild
@@ -131,6 +144,9 @@ BMTopic >> createMenu [
 				add: BMMenuConstants copyNode target: box selector: #copy argument: #();
 				add: BMMenuConstants cut target: box selector: #cut argument: #();
 				add: BMMenuConstants paste target: box selector: #paste argument: #();
+				addLine;
+				add: BMMenuConstants addImage target: box selector: #addImage argument: #();
+				add: BMMenuConstants removeImage target: box selector: #removeImage argument: #();
 				addLine;
 				add: BMMenuConstants delete target: box selector: #deleteNode argument: #()
 				 ])
@@ -376,7 +392,7 @@ BMTopic >> labelChanged: aString [
 { #category : #'announcement handling' }
 BMTopic >> modelChanged: aModel [
 
-	| totalExtent count startingPoint iconForm newIconShape myLabel |
+	| totalExtent count startingPoint iconForm newIconShape myLabel tempY|
 	
 	self resetChildren.
 	aModel font ifNotNil: [ self label font: aModel font ].
@@ -385,8 +401,11 @@ BMTopic >> modelChanged: aModel [
 		color: aModel foreColor;
 		model: aModel text;
 		text: aModel text.
-	totalExtent := 8 * aModel icons size + self label extent x
-	        @ (self label extent y max: 8).
+	totalExtent := aModel image isEmptyOrNil
+		ifFalse: [ (8 * aModel icons size + self label extent x max: 64)
+	        @ (self label extent y max: 64 ). ]
+		ifTrue: [ (8 * aModel icons size + self label extent x)
+	        @ (self label extent y ). ].
 	self extent: totalExtent.
 	startingPoint := ((self extent x / 2) * -1) + 4.
 	count := 1.
@@ -402,11 +421,25 @@ BMTopic >> modelChanged: aModel [
 		newIconShape translateTo: startingPoint @ 0.
 		startingPoint := startingPoint + 8 ].
 	self add: self label.
-	
+	tempY := aModel image isEmptyOrNil 
+		ifTrue: [  0 ]
+		ifFalse: [ totalExtent y / 2].
 	aModel icons isEmpty
 		ifTrue: [self label translateTo: 0@0]
-		ifFalse: [ self label translateTo: (aModel icons size * 8) - (aModel icons size * 4) @ 0 ].
+		ifFalse: [ self label translateTo: (aModel icons size * 8) - (aModel icons size * 4) @ 0].
 		self label pushFront.
+		
+	aModel image isEmptyOrNil 
+		ifFalse: [ | iconShape |
+			iconForm :=  Form fromBase64String: aModel image.
+			iconShape := RSBitmap new.
+			iconShape
+				form: iconForm;
+				extent: 64@64.
+			self add: iconShape.
+			"iconShape translateTo: 0@self label extent y * 2."
+			self label pushFront
+		].
 
 	self updateCanvas
 ]
@@ -442,6 +475,11 @@ BMTopic >> removeIcon [
 		self model removeIcon: selection key asSymbol 
 	]
 		
+]
+
+{ #category : #removing }
+BMTopic >> removeImage [ 
+	self model image: ''
 ]
 
 { #category : #clipboard }
@@ -489,6 +527,8 @@ BMTopic >> writeNode: writer [
 		self model font bmWriteXMLTo: writer.
 		self model foreColor bmWriteXMLTo: writer purpose: 'foreground'.
 		self writeIcons: writer.
+		self model image isEmptyOrNil ifFalse: [ 
+			writer tag: 'image' with: [ writer cdata: self model image] ].
 		self writeAdditionalTagsTo: writer. 
 		self model children do: [ :node | node writeNode: writer ]]
 

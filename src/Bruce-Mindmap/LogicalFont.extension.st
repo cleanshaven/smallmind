@@ -5,11 +5,11 @@ LogicalFont >> bmWriteXMLTo: writer [
 	| attributes |
 	
 	attributes := Dictionary 
-		with: 'pointSize'->self pointSize asString
-		with: 'familyName'->self familyName asString
-		with: 'stretchValue'->self stretchValue asString 
-		with: 'weightValue'->self weightValue asString
-		with: 'slantValue'->self slantValue asString.
+		with: BMXMLTags pointSize->self pointSize asString
+		with: BMXMLTags familyName->self familyName asString
+		with: BMXMLTags stretchValue->self stretchValue asString 
+		with: BMXMLTags weightValue->self weightValue asString
+		with: BMXMLTags slantValue->self slantValue asString.
 		
 	writer tag: BMXMLTags font attributes: attributes 
 

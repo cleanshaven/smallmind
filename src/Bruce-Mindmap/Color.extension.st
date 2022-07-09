@@ -5,11 +5,11 @@ Color >> bmWriteXMLTo: writer purpose: aString [
 	| attributes |
 	
 	attributes := Dictionary 
-		with: 'red'->self red asString 
-		with: 'green'->self green asString
-		with: 'blue'->self blue asString 
-		with: 'alpha'->self alpha asString
-		with: 'purpose'->aString.
+		with: BMXMLTags red->self red asString 
+		with: BMXMLTags green->self green asString
+		with: BMXMLTags blue->self blue asString 
+		with: BMXMLTags alpha->self alpha asString
+		with: BMXMLTags purpose->aString.
 		
 	writer tag: BMXMLTags color attributes: attributes
 

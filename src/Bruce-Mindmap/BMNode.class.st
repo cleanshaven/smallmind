@@ -11,7 +11,8 @@ Class {
 		'announcer',
 		'details',
 		'icons',
-		'link'
+		'link',
+		'image'
 	],
 	#category : #'Bruce-Mindmap-model'
 }
@@ -124,6 +125,19 @@ BMNode >> icons [
 BMNode >> icons: anObject [
 
 	icons := anObject
+]
+
+{ #category : #accessing }
+BMNode >> image [
+
+	^ image
+]
+
+{ #category : #accessing }
+BMNode >> image: anObject [
+
+	image := anObject.
+	self announce: (BMModelChanged new newData: self; yourself)
 ]
 
 { #category : #initialization }

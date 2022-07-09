@@ -70,6 +70,11 @@ BMXMLTags class >> iconAttribute [
 	^name
 ]
 
+{ #category : #accessing }
+BMXMLTags class >> link [
+	^'link' 
+]
+
 { #category : #constants }
 BMXMLTags class >> mindmap [
 	^'mindmap'
