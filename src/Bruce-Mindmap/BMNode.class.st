@@ -12,7 +12,8 @@ Class {
 		'details',
 		'icons',
 		'link',
-		'image'
+		'image',
+		'task'
 	],
 	#category : #'Bruce-Mindmap-model'
 }
@@ -82,9 +83,6 @@ BMNode >> details [
 BMNode >> details: anObject [
 
 	details := anObject.
-	details isEmptyOrNil 
-		ifTrue: [ self removeIcon: #detailIcon ]
-		ifFalse: [ self addIcon: #detailIcon ]
 
 	
 ]
@@ -146,6 +144,7 @@ BMNode >> initialize [
 	self children: OrderedCollection new.
 	self announcer: Announcer new.
 	self icons: OrderedCollection new.
+	self task: BMTaskModel new.
 
 	self details: ''
 
@@ -161,6 +160,12 @@ BMNode >> link [
 BMNode >> link: anObject [
 
 	link := anObject
+]
+
+{ #category : #'as yet unclassified' }
+BMNode >> nextTask [
+	self task next.
+	self announce: (BMModelChanged new newData: self; yourself) 
 ]
 
 { #category : #accessing }
@@ -181,10 +186,28 @@ BMNode >> parentModel [
 
 ]
 
+{ #category : #removing }
+BMNode >> removeAllTaskIcons [
+
+	#(#bmCancelIcon #bmCompleteIcon #bmInProcessIcon #bmOnHoldIcon) do: [ :icon | self removeIcon: icon ]
+]
+
 { #category : #accessing }
 BMNode >> removeIcon: aSymbol [
 	self icons remove: aSymbol ifAbsent: [ ^self ].
 	self announce: (BMModelChanged new newData: self; yourself)
+]
+
+{ #category : #accessing }
+BMNode >> task [
+
+	^ task
+]
+
+{ #category : #accessing }
+BMNode >> task: anObject [
+
+	task := anObject
 ]
 
 { #category : #accessing }

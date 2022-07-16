@@ -33,7 +33,7 @@ BMMainTopic >> circle: anObject [
 	circle := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 BMMainTopic >> createFileMenu: box [
 	^MenuMorph new
 		add: BMMenuConstants save target: box selector: #saveMap argument: #();
@@ -42,7 +42,7 @@ BMMainTopic >> createFileMenu: box [
 		
 ]
 
-{ #category : #initialization }
+{ #category : #menu }
 BMMainTopic >> createMenu [
 	self @ (RSMenuActivable new
 		menuDo: [ :menu :box | 
@@ -65,6 +65,9 @@ BMMainTopic >> createMenu [
 				add: BMMenuConstants addImage target: box selector: #addImage argument: #();
 				add: BMMenuConstants removeImage target: box selector: #removeImage argument: #();
 				addLine;
+				add: BMMenuConstants changeTask target: box selector: #changeTask argument: #();
+				addLine;
+
 				add: 'File' subMenu: (self createFileMenu: box)])
 ]
 
@@ -104,12 +107,13 @@ BMMainTopic >> modelChanged: aModel [
 	| aCircle |
 	super modelChanged: aModel.
 	aCircle := RSCircle new.
-	self extent: (self model image isEmptyOrNil 
+	aCircle extent: (self model image isEmptyOrNil 
 							ifTrue: [(self extent x + 5)@(self extent x + 5)]
-							ifFalse: [ ((self extent x + 5)min:64 + 5)@((self extent x + 5 )min:64 + 5) ] ).
-	aCircle extent: self extent.
+							ifFalse: [ ((self extent x + 5)max:64 + 5)@((self extent x + 5 )max:64 + 5) ] ).
 	self add: aCircle.
-	aCircle pushBack
+	self extent: aCircle extent.
+	aCircle pushBack.
+	self signalUpdate
 	
 		
 
@@ -150,8 +154,9 @@ BMMainTopic >> saveMap [
 		reference writeStreamDo: [ :stream | 
 			stream 
 				truncate;
-				<< writer asString;
-				close ]
+				<< writer asString
+		].
+		self inform: 'Mindmap Saved'
 	]
 ]
 

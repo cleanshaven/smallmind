@@ -1,0 +1,87 @@
+Class {
+	#name : #BMIcons,
+	#superclass : #Object,
+	#classInstVars : [
+		'appIcon'
+	],
+	#category : #'Bruce-Mindmap-icons'
+}
+
+{ #category : #accessing }
+BMIcons class >> appIcon [ 
+	^appIcon ifNil: [ appIcon := Form fromBinaryStream: self appIconStream base64Decoded readStream ]
+
+]
+
+{ #category : #accessing }
+BMIcons class >> appIconStream [ 
+	^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAArJJREFUOI2lk0tIVAEUhr97546NdxppGtMZJzXLhNQo6WGkFRbWIrI3kkWWhTBuCtEWhQktgmoRBEFRRES1yJKoXEQJlYE9fWVpI6OOoKLOOOY4L+dxW1RQpovoWx3O+Q/8cP4D/4lqml4SoNfp1LuK96Rd37BKX+n65lnkdIVfA5NTxcJvtdF45liVIgiWiMcvmDuaeHQyFbNRxjXURUHpe1uWNtrb1u/90tDrOw1Y/3Agr1lWoy8q2Od72yooPj+BnFx6n31k57o4xiYkEuaMzR22q+OPrNRlzpOFfY19/juAWwREUWc8p12/erMUZ8BgKcJQtp/ojFRGIhoAbtzrJtYgs315HOYEE9X58bEGjVgCIIk6Y6X+aN2JiOcygvTTkNVGTP1zZvf3cOGKG1Cw9XlZGaWjvnMUj9uNdpaQ7PSDJK8uLIuan87Ei0RCw05iau/zqsKENtsEmJgMhlEzwbVbQ9x/GuF4xia0UWBe2Hq4tO1NvUqzdOv5sMOqkoy5uG5c5aFFTZJJ5maNFX8gRFfPOK0tHXR9UFGdkk+0pObSlxYKExeK415vthga7GzW5hxCcXdiksbJyoylud1BYoIW51gAURTIWxOLbsiIIPw42jyNjDMcwpKcFlAFBz51S4bkInnVAZUwbMU4+RnHTRFdh5aGz4MMj7h49cBP2YJsaru7eGLvRgG26OM41f5h5FcOcjWZ26qUYGhJdrjNXL+xUJwamK9jozQODbB/cTphn58rTe98lR1NBcJUoQjlF3Pyzu1OSZMC4TCP7TYsGcsRBYH2wQEqGl+E3o46zk5EQrcA20wRTwFKgINr4011LwsKlWBpuRLcUaysiNHfnWlpRmSVuqQmf1souLdEKU1Kbfp9Nt0z/UVQiTQ3DPZ7ncHJ9JZRh93u89z+Zxcz8R0OPwuHFG6EhAAAAABJRU5ErkJggg=='
+
+]
+
+{ #category : #'as yet unclassified' }
+BMIcons class >> cancelIconStream [
+^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAfAAAAHwBFQ/t5AAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAE7SURBVDiNjZI/SwNBEEffTLqYiBJrv0IE5cAyxMhhpwjqN0wh1qI5BZtALIKt9lqJEC8JIcmORf64We+C0+0M7+3sj5Xh0f7u1ArXQAnHVemx88KaSmtRFZEmYt8FmZ5LWo+6wN58/omjnidJa1EVJQEq81ZXvQNABSVJa1H1HzBARRUugN46SQ7cU7gUgEE9OnRwC2wux8KXCMc2YYzSAnY8uG9mJ+WH5ydZdDIls80csJUFz+7xKkfi1wr8R7CUGPcIG8FoaGaxDwNoKHCOAcI44/aJFmQQNlcE87RbrL55UWUz7vqN6CBT4MFe2jIU6C+PxnYo0XyYvpmLBRr4/ySQSD78m/a6f6Km3ARwT6Hhp11MOm2FONwER1MFRgEcF5NOO0wwS2IwUufcKfAG9p4HZ0g+gFfn3NkPE8qrzATeYkIAAAAASUVORK5CYII='
+
+]
+
+{ #category : #'as yet unclassified' }
+BMIcons class >> completeIconStream [
+
+^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApAAAAKQBooM8sQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHlSURBVDiNlZO9a1NhFMZ/517R5Gaw1aEY0TZKXBQz6KIpJZUUMWYOCG4RR4XqpJOLS6kS0RJB/4KOVaq12qHgFqs0zaSQRDIUHSJtPrjpzXFoEpNrE/GZ3vPxPO9zXs4ruDC+EA+p6SRFJaowCigqeRVdRuXFx/jrbHe/tA+RlYjHrnlTonIDMNzCLThAulzxTW8k5u2OQGQl4mlUrbfARB+iGx/KFd+VjcS8bQDYNW/qP8gAl4as6iyAjC/EQ2o0Pw2wDYDXsDi0/zCl+vc/45hOyFDRQTN3yLfH7nMn8IAjB4620yaOmTQQjf6LfCtwj4AVJF/9yk/7R3d5ygCOtSNBuOZPcu7ghZ6bT3hPsb6VYa44Q0PtboHRfUCzHfk9xwkPTzIxHMUyfYSHJglYQda3MqSLj9jRhtugGkDnVUr1AnOFGRx1uO6/ScAKkt1e43nx8V5kgKKh8K47k9v+QqrwELtZJ7u9Rrow67bdgcCSXHx19YyIfgbMnuG8JynVC+zozp5kwDFEzxqt3U67q4Xat0FkBJ6txhZzBkC54ptWlfd9u//Gcm1k8y60FmgjMW//qloxVJ6y+2H62hZ4Uh/ZjGXOZxotJ70Iv7l8GsdMAlOojO361bzAkoi+XI0t5rr7fwM70LYEx6UPoQAAAABJRU5ErkJggg=='
+]
+
+{ #category : #'as yet unclassified' }
+BMIcons class >> getIcon: aBase64 [
+
+	^Form fromBinaryStream: aBase64 base64Decoded readStream 
+]
+
+{ #category : #'as yet unclassified' }
+BMIcons class >> inProcessIconStream [
+
+^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAADBUlEQVQ4jY2TXUybdRTGf/zft4s0K9BRdfZtjZEStzadvVhYTAyayHq3yWAby76UfQXdhckuxKDDLZh4ueiMJmYUyYzD0A+dXo0Z3S50mxcIjfSFbBlr1rdYoLQFsi6F9++F2IDbhSc5Fyc558lzznOeCh4Nxe1+bo/TubHZtn59jQQWFuZz6fvpaDKVDAPm6uaK1YXX692jaa7uY0ePb/L7/aoQAgDTNBmNjy71hXrHjLTRHY/Hv38EwOv1nT144MDJlpbdtbfHJxjqv8jydPYfSk9uINh+mLr6emLRyMw3AwOfxOMjHwGoAD6fr7Vtb9vJ5uaW2i/P9GAfukV7VvLECn6Re1y+/gc/NTVwrPt9B/BOf+lhQtf1CIASDAZH9cSEPNV2SF62eKTOC4/N7yweeartsNQTEzLYFBwBhOJ2u/e919l1YiFfELlzfTQuCk47TSaqLNTNl6hElG/kMAV3plJUNjawyevdcOPmb2PC6dRe9/v96tX+r9mRlQA87dLYF+4jtv9lPnWpzLBUBtk5azL01UUCgYDF6XS1qjabzS6EYOmvmfLOADU1NRw53cXc3BzfnjsPN0d4I1mkEkFpagYhBNXVVXZhmnJFjzWK/q+QUqIuLs5nTdNEfaqWIvfKLHK5HNHzn7Nw/Xf23y/iQAUERUwsGx2Ypkkhn59TFBRlS+DFXZsbtopfrlzB9wB+kAWSgz+y+9e7vFoA66pDhh0VNJ55l7uTk6VINPyxSKaS4b5Q71hdfT35pm3olmV6DEFHagk7yhrKY5Zl5rdv43mPh97QhYRhGIMKIK1Wa1pKuf3gWx3WWGaSO1Mp6h5I1PIjmYQdFdze8RJHP+giGotOX7v2c2c2m/1TAchkMuOzs9l1qqJuOfR2h7WysYHIwww3atdx69lqRrd6eOVsJ6/taiYajUwPXLr0mT6uf7HGCysvvVN7Rut5s/3I5kAgYFltpuHh4VIodEE30saHiUQi9u/M47QTmqa1OJ2u1qoqmx2gUMjnUqlUzDCMQf5j578BzdxDvdJQw/IAAAAASUVORK5CYII='
+]
+
+{ #category : #initialization }
+BMIcons class >> initialize [
+	
+	| themeIcons |
+	
+	themeIcons := ThemeIcons current.
+	
+	themeIcons icons at: #bmAppIcon put: (self getIcon: self appIconStream).
+	themeIcons icons at: #bmNoteIcon put: (self getIcon: self noteIconStream).
+	themeIcons icons at: #bmWebLinkIcon put: (self getIcon: self webLinkStream).
+	themeIcons icons at: #bmCancelIcon put: (self getIcon: self cancelIconStream ).
+	themeIcons icons at: #bmCompleteIcon put: (self getIcon: self completeIconStream ).
+	themeIcons icons at: #bmInProcessIcon put: (self getIcon: self inProcessIconStream).
+	themeIcons icons at: #bmOnHoldIcon put: (self getIcon: self onholdIconStream )
+	
+]
+
+{ #category : #'as yet unclassified' }
+BMIcons class >> noteIconStream [
+
+^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbUlEQVR4nKWSP09UQRTFf3fexMRQCvQG4RNoYcIXED8H8RsQW2s6vgEJVvZLYqzMFvQ0CImFic26ayBmQwIz91DM+zO7262vmDfz3j3nnnvm2PT8ufiPJ7qMrXfztcB/RhsEd1u7u8uIngPyOQhqKlHO6larPrZbz4GYPUD6h6FSbIBKpVBFWNG1JNkD0XMD6W9fMOjowLawV38UnhtickNpVhWDLUmtB7Nq0ORG9NTA43RF6rIXq2SQi4KAHicLCtQjC0SdbjOk8kaQUyDm1LQEBhrcVm17x2iGqZhtJnIORQEPk94s1bilqy03U8gEpNwQcwq9Aut/2aCkgl+OLwYqARaI7qGY2HbsjOw6Db1LcF5/+AnA3a9vXI8OuyDNVtwfclgCJSBnQ/fX3P2+4MfXT7x4uX8UsxtKtyC1xtXTGt7KFcL9Gbc3p1x9/8LmztuPuwdnxzY+2dOy2TVJR2oaMrH96s3R3vvPxwBPHUXMYi+YIFkAAAAASUVORK5CYII='
+
+
+
+]
+
+{ #category : #'as yet unclassified' }
+BMIcons class >> onholdIconStream [
+
+^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAMxSURBVDiNbZNdTFsFFMd/915K6e0HBaRA7YpQoeOjQKwLUeZkuEWcYS9T9AVjnC8mJHuYMfFp+uILxq9oTDTxyQeJuKAwzLZM3eZcHRMG2RDG+CgrpVIKbWnp5+31gUiY7Lyd5Hf+Oef88xd4SNmaelpLqq3dOpPJoipqNhGJLm5Me7+9f69/7v+ssLtxHTt9yGwt/6C+q6PF6tqvjyz/g1Yvo5EL8P45Hpq55Lnhn5/tXfr9m/k9Ah/61cpkOnU+fn/Rmbk2SK0+SF1ZimgCZoIydxOlPHK8h4mhX+aXLo++NXHx4wsAEkDD86dOlLucg7Hxa5WHwj/Q2xHHXa1it0jUPCrxVE2OTmeUOxc8aBrbilTZ0CZtFY4EfePrIg0v51sb686wvmw5Ll+h6wBsbObwrmQBUFWY9qZRFJVTxxQq7w7Q+OKz1San43MAqfGJF3qfO/1mjzzaL7x+MEVWUfnozArRK1Fipfn8dnmT7Nl1fppI0vaMAXdVjh+HFjG7D5aEFlJDotlmaU+urYqdjnUAsllwaVSOFoBvOc1WOMdhPRjSKgB5kkCNNoC9tbmoaN++N0S5uKgkuTBDi0MCQJMnUCWLD3N3pw48liQWWMVoKa4QBVGQMvH4jh9KTmUtnduBSw17xURUlGQKQRBEMbkZj+RX2Fnwbz8to4Avoe7AGUXdIzAbzMdot7EViYbFsM8/VdTUzMBN7faNokoGga2cik4nEknnUFRQdy0ytmomshxIRVfWhiVdnnVSYyzszhYUFjab/BSbJEIagWmThq5OI1UOLYMb4G43UlGm4fxYDm/tS0yOXL11s//9d6RwcCqmNTxubXj1ldbhoVmx1Rajub6ApkYdeZKAXpZoadZRUabh+nSOs+tPkjCUR6bO/fru6pznjgQQ+LvjUio61uQ6ebL25+ub4r3ZEBY5TbFp25nbC1m+uqrHU3AY0V4f++Pr776YHO777IEswHui+4TS52hv7XYeedoW+muUbGAJRAmdow5T7X4mBkZmFj23Pp081/flf1MPpBHA6n7NXlZpe7vYbqvTmvRmJZVWk5vxYMQXuOG9PffJxvz3kd38v2L5ScZ2d0/wAAAAAElFTkSuQmCC'
+
+
+]
+
+{ #category : #'as yet unclassified' }
+BMIcons class >> webLinkStream [
+
+^'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADDUlEQVR4nGJkIBLITw+vdRLQqWJlYuE4+eH2hovp8wIZGBgYAAAAAP//IgrJTQurbdk57//1Nw//n31x6//ck5v/G89I2cvAwMAAAAAA//9iJKRZdmpobaqSe1OwiTPDkuPbGL78/MbgbmDN8OjlM4ZplzZtAAAAAP//YsGnWWZySG2ygktTkIkzw9yD6xn2vri07y3DlwNfjn9rstM3YzDmVgwAAAAA//9iwmeADZdqlbuuNcOio1sYrr968OP+v9dZgn85HYS4+Rg23TnG8PHH1x8AAAAA///Ca8CfP384Ju1dzsDDyclgIKXGYfpL+oKLpL6TurwSw5/nnxlO/bjXBgAAAP//wukFvsm+zl/+/vxhLa3J8ezve4Zf7z4zqApIc6jLqzCsP7Kb4TzDk7oXBRuaAQAAAP//QglEWFT9/fOH4+nblz/s1I047v16zXDi3BkGWUYBBmdzW4Ydxw4wXON51/i6fEsDAwMDAwAAAP//ghsgNy2sNk3Fo8lRzYShfeMcBiNlbYaHf94wHD19kkHwD/tPtu//2b/8+vHroeTP7g/1u2tg+gAAAAD//2KERVWakntTkIkzw5Ttyxj4uXkZnjN/Zjh84hiDwG+2nzckv/l9K9m5C5tXAQAAAP//YpSZHFKbouTaFGrmxjD34HqG49fP/5DhE+W4+Ogmg9B/LgZpZTmGtdm9ONMLAAAA//9iseFSrQoxdWWYf2gjw+6n5/fd4XyZ9fPFjwtm0pocHyWYGf5+/vsDX0wBAAAA//9iYvz7n+P08xsMjP8YGN78/3JAkUlkmp2hOYedrS0Dw9sfDKd+3GvDZwAAAAD//2I5+e7WJqELvH4BVq4Mv77/aPrz9y+DhrQSw+rdWxgusb2sf1myqRmfAQAAAAD//2JkYGBgUKjxOWzLp27jZ+/G8PrDO4bluzYy3OB+1/u6aVcFAwPDH3wGAAAAAP//YmRmZlZgZmaWEY2x6JX/y2/27c/P30/5vq38NO/0XJii/////4DiP/////8CFfvAwMDAAAAAAP//AwCx9B5CuU6aagAAAABJRU5ErkJggg==
+'
+
+
+]

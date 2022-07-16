@@ -184,6 +184,12 @@ BMSAXParser >> handleRootNode [
 
 ]
 
+{ #category : #'as yet unclassified' }
+BMSAXParser >> handleTask: anAttributeDictionary [
+
+	self top model task current: ((anAttributeDictionary at: 'current') asSymbol)
+]
+
 { #category : #initialization }
 BMSAXParser >> initialize [
 	super initialize.
@@ -236,7 +242,8 @@ BMSAXParser >> startElement: aQualifiedName attributes: anAttributeDictionary [
 	aQualifiedName = BMXMLTags detail ifTrue: [ self stringBuilder: '' ].
 	aQualifiedName = BMXMLTags link ifTrue: [ self stringBuilder: '' ].
 	aQualifiedName = 'image' ifTrue: [ self stringBuilder: '' ].
-	aQualifiedName = BMXMLTags icon ifTrue: [ self handleIcon: anAttributeDictionary ]
+	aQualifiedName = BMXMLTags icon ifTrue: [ self handleIcon: anAttributeDictionary ].
+	aQualifiedName = 'task' ifTrue: [ self handleTask: anAttributeDictionary ]
 
 	
 ]

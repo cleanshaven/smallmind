@@ -88,6 +88,13 @@ BMTopic >> application [
 	^self canvas application
 ]
 
+{ #category : #'as yet unclassified' }
+BMTopic >> changeTask [ 
+	self model nextTask.
+	self model removeAllTaskIcons.
+	self insertCurrentTaskIcon
+]
+
 { #category : #clipboard }
 BMTopic >> clipboard [ 
 	^self application class clipboard
@@ -124,7 +131,7 @@ BMTopic >> createIconList [
 		each->icon] thenReject: [ :each | self doNotDisplayIcons includes: each key asSymbol ]
 ]
 
-{ #category : #initialization }
+{ #category : #menu }
 BMTopic >> createMenu [
 
 	self @ (RSMenuActivable new
@@ -147,6 +154,8 @@ BMTopic >> createMenu [
 				addLine;
 				add: BMMenuConstants addImage target: box selector: #addImage argument: #();
 				add: BMMenuConstants removeImage target: box selector: #removeImage argument: #();
+				addLine;
+				add: BMMenuConstants changeTask target: box selector: #changeTask argument: #();
 				addLine;
 				add: BMMenuConstants delete target: box selector: #deleteNode argument: #()
 				 ])
@@ -206,9 +215,9 @@ BMTopic >> detailIcon: anObject [
 	detailIcon := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private ' }
 BMTopic >> doNotDisplayIcons [
-	^#(#detailIcon #weblinkIcon) asOrderedCollection
+	^#(#bmNoteIcon #bmWebLinkIcon #bmCancelIcon #bmCompleteIcon #bmInProcessIcon #bmOnHoldIcon) asOrderedCollection
 ]
 
 { #category : #'menu messages' }
@@ -226,8 +235,8 @@ BMTopic >> editDetails [
 	newText ifNotNil: [ 
 		self model details: newText.
 		newText isEmptyOrNil 
-			ifTrue: [ self model removeIcon: #detailIcon ] 
-			ifFalse: [self model addIcon: #detailIcon] ]
+			ifTrue: [ self model removeIcon: #bmNoteIcon ] 
+			ifFalse: [self model addIcon: #bmNoteIcon] ]
 
 	
   
@@ -251,8 +260,8 @@ BMTopic >> editLink [
 	newLink ifNotNil: [ 
 		self model link: newLink.
 		self model link isEmptyOrNil 
-			ifTrue: [ self model removeIcon: #weblinkIcon ] 
-			ifFalse: [self model addIcon: #weblinkIcon]].
+			ifTrue: [ self model removeIcon: #bmWebLinkIcon ] 
+			ifFalse: [self model addIcon: #bmWebLinkIcon]].
 	
 
 ]
@@ -340,7 +349,7 @@ BMTopic >> getText: initialText [
 		openModal. 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 BMTopic >> gotoLink: aString [
 
 	aString isEmptyOrNil ifFalse: [ WebBrowser openOn: aString ]
@@ -366,6 +375,20 @@ BMTopic >> initialize [
 	self draggable.
 	self createMenu.
 	self when: RSMouseDoubleLeftClick do: [ :evt | self gotoLink: self model link ]
+
+]
+
+{ #category : #'as yet unclassified' }
+BMTopic >> insertCurrentTaskIcon [
+"^#(#new #inprogress #onhold #done #cancel) asOrderedCollection"
+
+	| iconMap iconToInsert|
+	iconMap := Dictionary with: #inprogress->#bmInProcessIcon
+		with: #onhold->#bmOnHoldIcon
+		with: #done->#bmCompleteIcon
+		with: #cancel->#bmCancelIcon.
+	iconToInsert := iconMap at: self model task current ifAbsent: [ nil ].
+	iconToInsert ifNotNil: [ self model addIcon: iconToInsert ] 
 
 ]
 
@@ -396,6 +419,18 @@ BMTopic >> modelChanged: aModel [
 	
 	self resetChildren.
 	aModel font ifNotNil: [ self label font: aModel font ].
+		aModel image isEmptyOrNil 
+		ifFalse: [ | iconShape |
+			iconForm :=  Form fromBase64String: aModel image.
+			iconShape := RSBitmap new.
+			iconShape
+				form: iconForm;
+				extent: 64@64.
+			self add: iconShape.
+			"iconShape translateTo: 0@self label extent y * 2."
+			"self label pushFront"
+		].
+
 	myLabel := self label.
 	myLabel
 		color: aModel foreColor;
@@ -429,17 +464,6 @@ BMTopic >> modelChanged: aModel [
 		ifFalse: [ self label translateTo: (aModel icons size * 8) - (aModel icons size * 4) @ 0].
 		self label pushFront.
 		
-	aModel image isEmptyOrNil 
-		ifFalse: [ | iconShape |
-			iconForm :=  Form fromBase64String: aModel image.
-			iconShape := RSBitmap new.
-			iconShape
-				form: iconForm;
-				extent: 64@64.
-			self add: iconShape.
-			"iconShape translateTo: 0@self label extent y * 2."
-			self label pushFront
-		].
 
 	self updateCanvas
 ]
@@ -529,6 +553,7 @@ BMTopic >> writeNode: writer [
 		self writeIcons: writer.
 		self model image isEmptyOrNil ifFalse: [ 
 			writer tag: 'image' with: [ writer cdata: self model image] ].
+		self model task writeToXML: writer.
 		self writeAdditionalTagsTo: writer. 
 		self model children do: [ :node | node writeNode: writer ]]
 

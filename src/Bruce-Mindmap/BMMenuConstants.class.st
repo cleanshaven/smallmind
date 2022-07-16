@@ -29,6 +29,11 @@ BMMenuConstants class >> backgroundColor [
 	^'Background Color'
 ]
 
+{ #category : #'as yet unclassified' }
+BMMenuConstants class >> changeTask [
+	^'New/In Progress/On Hold/Done/Cancel'
+]
+
 { #category : #adding }
 BMMenuConstants class >> color [
 	^'Color'

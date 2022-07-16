@@ -34,7 +34,7 @@ BMPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Small Mind';
 		initialExtent: 1000@1000;
-		windowIcon: self windowIcon
+		windowIcon: (self iconNamed: #bmAppIcon)
 		
 ]
 
