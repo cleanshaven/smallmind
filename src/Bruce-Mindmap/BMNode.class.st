@@ -189,7 +189,7 @@ BMNode >> parentModel [
 { #category : #removing }
 BMNode >> removeAllTaskIcons [
 
-	#(#bmCancelIcon #bmCompleteIcon #bmInProcessIcon #bmOnHoldIcon) do: [ :icon | self removeIcon: icon ]
+	#(#bmCancelIcon #bmCompleteIcon #bmInProcessIcon #bmOnHoldIcon #bmToDoIcon) do: [ :icon | self removeIcon: icon ]
 ]
 
 { #category : #accessing }

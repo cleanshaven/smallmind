@@ -228,7 +228,7 @@ BMTopic >> detailIcon: anObject [
 
 { #category : #'private ' }
 BMTopic >> doNotDisplayIcons [
-	^#(#bmNoteIcon #bmWebLinkIcon #bmCancelIcon #bmCompleteIcon #bmInProcessIcon #bmOnHoldIcon) asOrderedCollection
+	^#(#bmNoteIcon #bmWebLinkIcon #bmCancelIcon #bmCompleteIcon #bmInProcessIcon #bmOnHoldIcon #bmToDoIcon) asOrderedCollection
 ]
 
 { #category : #'menu messages' }
@@ -397,7 +397,8 @@ BMTopic >> insertCurrentTaskIcon [
 	iconMap := Dictionary with: #inprogress->#bmInProcessIcon
 		with: #onhold->#bmOnHoldIcon
 		with: #done->#bmCompleteIcon
-		with: #cancel->#bmCancelIcon.
+		with: #cancel->#bmCancelIcon
+		with: #todo->#bmToDoIcon.
 	iconToInsert := iconMap at: self model task current ifAbsent: [ nil ].
 	iconToInsert ifNotNil: [ self model addIcon: iconToInsert ] 
 
@@ -524,6 +525,7 @@ BMTopic >> removeImage [
 BMTopic >> taskMenu: box [
 	^MenuMorph new
 		add: 'New' target: box selector: #changeTask: argument: #(#new);
+		add: 'TODO' target: box selector: #changeTask: argument: #(#todo);
 		add: 'In Progress' target: box selector: #changeTask: argument: #(#inprogress);
 		add: 'On Hold' target: box selector: #changeTask: argument: #(#onhold);
 		add: 'Done' target: box selector: #changeTask: argument: #(#done);
