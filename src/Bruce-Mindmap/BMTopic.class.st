@@ -95,6 +95,13 @@ BMTopic >> changeTask [
 	self insertCurrentTaskIcon
 ]
 
+{ #category : #'as yet unclassified' }
+BMTopic >> changeTask: aSymbol [ 
+	self model task current: (aSymbol at: 1).
+	self model removeAllTaskIcons.
+	self insertCurrentTaskIcon
+]
+
 { #category : #clipboard }
 BMTopic >> clipboard [ 
 	^self application class clipboard
@@ -156,6 +163,7 @@ BMTopic >> createMenu [
 				add: BMMenuConstants removeImage target: box selector: #removeImage argument: #();
 				addLine;
 				add: BMMenuConstants changeTask target: box selector: #changeTask argument: #();
+				add: 'Task' subMenu: (self taskMenu: box);
 				addLine;
 				add: BMMenuConstants delete target: box selector: #deleteNode argument: #()
 				 ])
@@ -504,6 +512,18 @@ BMTopic >> removeIcon [
 { #category : #removing }
 BMTopic >> removeImage [ 
 	self model image: ''
+]
+
+{ #category : #menu }
+BMTopic >> taskMenu: box [
+	^MenuMorph new
+		add: 'New' target: box selector: #changeTask: argument: #(#new);
+		add: 'In Progress' target: box selector: #changeTask: argument: #(#inprogress);
+		add: 'On Hold' target: box selector: #changeTask: argument: #(#onhold);
+		add: 'Done' target: box selector: #changeTask: argument: #(#done);
+		add: 'Canceled' target: box selector: #changeTask: argument: #(#cancel);
+		yourself
+
 ]
 
 { #category : #clipboard }

@@ -201,6 +201,7 @@ BMNode >> removeIcon: aSymbol [
 { #category : #accessing }
 BMNode >> task [
 
+	task ifNil: [ task := BMTaskModel new ].
 	^ task
 ]
 

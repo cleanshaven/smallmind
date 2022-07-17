@@ -66,6 +66,8 @@ BMMainTopic >> createMenu [
 				add: BMMenuConstants removeImage target: box selector: #removeImage argument: #();
 				addLine;
 				add: BMMenuConstants changeTask target: box selector: #changeTask argument: #();
+				add: 'Task' subMenu: (self taskMenu: box);
+
 				addLine;
 
 				add: 'File' subMenu: (self createFileMenu: box)])
