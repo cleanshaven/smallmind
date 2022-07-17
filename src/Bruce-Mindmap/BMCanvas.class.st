@@ -3,7 +3,8 @@ Class {
 	#superclass : #RSCanvas,
 	#instVars : [
 		'mainTopic',
-		'application'
+		'application',
+		'filename'
 	],
 	#category : #'Bruce-Mindmap-roassal'
 }
@@ -24,6 +25,19 @@ BMCanvas >> application: anObject [
 BMCanvas >> clear [
 	self removeAllChildren: mainTopic.
 	self mainTopic: nil
+]
+
+{ #category : #accessing }
+BMCanvas >> filename [
+
+	^ self application filename
+]
+
+{ #category : #accessing }
+BMCanvas >> filename: anObject [
+
+	self application filename: anObject
+
 ]
 
 { #category : #initialization }

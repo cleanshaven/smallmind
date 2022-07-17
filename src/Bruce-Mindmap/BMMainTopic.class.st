@@ -2,7 +2,8 @@ Class {
 	#name : #BMMainTopic,
 	#superclass : #BMTopic,
 	#instVars : [
-		'circle'
+		'circle',
+		'filename'
 	],
 	#category : #'Bruce-Mindmap-roassal'
 }
@@ -36,8 +37,9 @@ BMMainTopic >> circle: anObject [
 { #category : #menu }
 BMMainTopic >> createFileMenu: box [
 	^MenuMorph new
-		add: BMMenuConstants save target: box selector: #saveMap argument: #();
 		add: BMMenuConstants open target: box selector: #openMap argument: #();
+		add: BMMenuConstants save target: box selector: #saveMap argument: #();
+		add: 'Save As...' target: box selector: #saveAsMap argument: #();
 		yourself
 		
 ]
@@ -91,6 +93,18 @@ BMMainTopic >> editBackgroundColor [
 	color ifNotNil: [ self model backgroundColor: color ]
 ]
 
+{ #category : #accessing }
+BMMainTopic >> filename [
+
+	^ filename
+]
+
+{ #category : #accessing }
+BMMainTopic >> filename: anObject [
+
+	filename := anObject
+]
+
 { #category : #initialization }
 BMMainTopic >> initialize [
 	super initialize.
@@ -100,6 +114,7 @@ BMMainTopic >> initialize [
 	self model text: 'My Mind'.
 	self model backgroundColor: self defaultBackgroundColor.
 	self model when: BMAnnounceBackgroundColorChanged do: [ :annoucement |  self backgroundColorChanged: annoucement newData].
+	self filename: nil
 	"self label pushFront."
 
 ]
@@ -134,19 +149,21 @@ BMMainTopic >> openMap [
 		parser := BMSAXParser on: stream.
 		parser canvas: canvas.
 		parser parseDocument.
-		stream close
+		stream close.
+		canvas filename: fileName
 	]
 ]
 
 { #category : #writing }
-BMMainTopic >> saveMap [
+BMMainTopic >> saveAsMap [
 
-	| reference writer|
+	| reference writer canvas|
 	
+	canvas := self canvas.
 	reference := UIManager default 
-		chooseForSaveFileReference: 'Save Mindmap as?'
-		extensions: #()
-		path: ''.
+			chooseForSaveFileReference: 'Save Mindmap as?'
+			extensions: #()
+			path: ''.
 	
 	reference ifNotNil: [ 
 		writer := XMLWriter new.
@@ -158,6 +175,36 @@ BMMainTopic >> saveMap [
 				truncate;
 				<< writer asString
 		].
+		canvas filename: reference fullName.
+		self inform: 'Mindmap Saved'
+	]
+]
+
+{ #category : #writing }
+BMMainTopic >> saveMap [
+
+	| reference writer canvas|
+	
+	canvas := self canvas.
+	self canvas filename isEmptyOrNil 
+		ifTrue: [  
+			reference := UIManager default 
+			chooseForSaveFileReference: 'Save Mindmap as?'
+			extensions: #()
+			path: '']
+		ifFalse: [ reference := self canvas filename asFileReference ].
+	
+	reference ifNotNil: [ 
+		writer := XMLWriter new.
+	"	writer enablePrettyPrinting."
+		writer 
+			tag: BMXMLTags mindmap with: [ self writeNode: writer ].
+		reference writeStreamDo: [ :stream | 
+			stream 
+				truncate;
+				<< writer asString
+		].
+		canvas filename: reference fullName.
 		self inform: 'Mindmap Saved'
 	]
 ]

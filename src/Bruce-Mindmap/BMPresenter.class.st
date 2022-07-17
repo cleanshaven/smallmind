@@ -9,7 +9,16 @@ Class {
 
 { #category : #initialization }
 BMPresenter >> connectPresenters [ 
-	self spCanvas canvas: (BMCanvas new application: self application; yourself)
+	self spCanvas canvas: (BMCanvas new application: self application; yourself).
+	
+	self application when: BMFileChanged do: [ :evt | 
+		self withWindowDo: [ :w | w title: 'Small Mind: ',evt newData ] ].
+	
+	self application when: BMUnsavedChange do: [ :evt |
+		self withWindowDo: [ :w | w title: 'Small Mind', 
+			(application filename isEmptyOrNil ifFalse: [': ', application filename ] ifTrue:['']) , '*' ]]
+	
+	
 
 ]
 

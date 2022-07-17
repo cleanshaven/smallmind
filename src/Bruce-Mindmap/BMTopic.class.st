@@ -29,7 +29,8 @@ BMTopic >> addChild [
 			controlPointsController: RSHorizontalCPAPController new.
 		self canvas add: line.
 		RSForceBasedLayout new charge: -1000; on: self canvas nodes.
-		self canvas zoomToFit
+		self canvas zoomToFit.
+		self application modelChanged
 	]
 		
 			
@@ -175,7 +176,8 @@ BMTopic >> cut [
 	canvas := self canvas.
 	self toClipboard.
 	self model parent deleteChild: self.
-	canvas signalUpdate 
+	canvas signalUpdate.
+	self application modelChanged 
 ]
 
 { #category : #defaults }
@@ -207,7 +209,8 @@ BMTopic >> deleteNode [
 	
 	self confirmDeleteChild  ifTrue: [ 
 		self model parent deleteChild: self.
-		canvas signalUpdate ]
+		canvas signalUpdate.
+		self application modelChanged ]
 
 ]
 
@@ -473,19 +476,22 @@ BMTopic >> modelChanged: aModel [
 		self label pushFront.
 		
 
-	self updateCanvas
+	self updateCanvas.
+	self canvas ifNotNil: [ 
+	self application modelChanged]
 ]
 
 { #category : #'menu messages' }
 BMTopic >> paste [
 
 	| parser |
-	
+	self clipboard isEmptyOrNil ifTrue: [ ^self ].
 	parser := BMClipboardParser on: self clipboard. 
 	parser 
 		canvas: self canvas;
 		parentNode: self;
-		parseDocument
+		parseDocument.
+	self application modelChanged
 	
 	
 ]

@@ -1,6 +1,10 @@
 Class {
 	#name : #BMApplication,
 	#superclass : #SpApplication,
+	#instVars : [
+		'filename',
+		'announcer'
+	],
 	#classInstVars : [
 		'clipboard',
 		'icons'
@@ -48,7 +52,57 @@ BMApplication class >> initialize [
 
 ]
 
+{ #category : #announcer }
+BMApplication >> announce: anAnnouncement [
+
+	self announcer announce: anAnnouncement.
+
+]
+
+{ #category : #accessing }
+BMApplication >> announcer [
+
+	^ announcer
+]
+
+{ #category : #accessing }
+BMApplication >> announcer: anObject [
+
+	announcer := anObject
+]
+
+{ #category : #accessing }
+BMApplication >> filename [
+
+	^ filename
+]
+
+{ #category : #accessing }
+BMApplication >> filename: anObject [
+
+	filename := anObject.
+	self announce: (BMFileChanged new newData: anObject)
+]
+
+{ #category : #initialization }
+BMApplication >> initialize [ 
+	super initialize.
+	self announcer: Announcer new
+]
+
+{ #category : #initialization }
+BMApplication >> modelChanged [ 
+	self announce: BMUnsavedChange new.
+
+]
+
 { #category : #accessing }
 BMApplication >> start [ 
 	^(self new: BMPresenter) open
+]
+
+{ #category : #announcer }
+BMApplication >> when: anAnnouncement do: aValueable [
+	self announcer when: anAnnouncement do: aValueable
+
 ]
