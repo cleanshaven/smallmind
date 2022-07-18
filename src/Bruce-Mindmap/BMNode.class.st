@@ -13,7 +13,8 @@ Class {
 		'icons',
 		'link',
 		'image',
-		'task'
+		'task',
+		'lineColor'
 	],
 	#category : #'Bruce-Mindmap-model'
 }
@@ -151,6 +152,18 @@ BMNode >> initialize [
 ]
 
 { #category : #accessing }
+BMNode >> lineColor [
+
+	^ lineColor
+]
+
+{ #category : #accessing }
+BMNode >> lineColor: anObject [
+
+	lineColor := anObject
+]
+
+{ #category : #accessing }
 BMNode >> link [
 
 	^ link
@@ -165,7 +178,7 @@ BMNode >> link: anObject [
 { #category : #'as yet unclassified' }
 BMNode >> nextTask [
 	self task next.
-	self announce: (BMModelChanged new newData: self; yourself) 
+"	self announce: (BMModelChanged new newData: self; yourself) "
 ]
 
 { #category : #accessing }

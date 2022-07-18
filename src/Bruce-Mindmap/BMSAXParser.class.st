@@ -78,7 +78,10 @@ BMSAXParser >> handleColor: anAttributeDictionary [
 		ifTrue: [ self top model foreColor: color ].
 		
 	(anAttributeDictionary at: BMXMLTags purpose) = BMXMLTags background 
-		ifTrue: [  self top model backgroundColor: color ]
+		ifTrue: [  self top model backgroundColor: color ].
+		
+	(anAttributeDictionary at: BMXMLTags purpose) = 'line'
+		ifTrue: [ self top model lineColor: color ]
 
 ]
 
@@ -120,6 +123,7 @@ BMSAXParser >> handleEndNode [
 			withBorderAttachPoint;
 			from: node;
 			to: child;
+			color: child model lineColor;
 			controlPointsController: RSHorizontalCPAPController new.
 		self canvas add: line]] on: CollectionIsEmpty do: [ ] 
 	
@@ -141,6 +145,7 @@ BMSAXParser >> handleEndRoot [
 			withBorderAttachPoint;
 			from: endNode;
 			to: child;
+			color: child model lineColor;
 			controlPointsController: RSHorizontalCPAPController new.
 		self canvas add: line]
 

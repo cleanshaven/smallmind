@@ -152,6 +152,7 @@ BMTopic >> createMenu [
 				add: BMMenuConstants link target: box selector: #editLink argument: #();
 				add: BMMenuConstants color target: box selector: #editColor argument: #();
 				add: BMMenuConstants font target: box selector: #editFont argument: #();
+				add: 'Line Color' target: box selector: #lineColor argument: #();
 				addLine;
 				add: BMMenuConstants addIcon target: box selector: #addIcon argument: #();
 				add: BMMenuConstants removeIcon target: box selector: #removeIcon argument: #();
@@ -381,6 +382,7 @@ BMTopic >> initialize [
 	
 	self extent: (self label textWidth@self label textHeight).
 	self model foreColor: self defaultForeColor.
+	self model lineColor: self defaultForeColor.
 	self model font: self label font.
 
 	self draggable.
@@ -422,6 +424,16 @@ BMTopic >> labelChanged: aString [
 	self adjustSize.
 	self updateCanvas
 
+]
+
+{ #category : #accessing }
+BMTopic >> lineColor [
+	| color |
+	
+	color := self getColor: Color red.
+	color ifNotNil: [ self incomingLines do: [ :line | line color: color. ].
+		self model lineColor: color ].
+	self updateCanvas
 ]
 
 { #category : #'announcement handling' }
@@ -578,6 +590,7 @@ BMTopic >> writeNode: writer [
 		self model link isEmptyOrNil ifFalse: [ writer tag: 'link' with: self model link ].
 		self model font bmWriteXMLTo: writer.
 		self model foreColor bmWriteXMLTo: writer purpose: 'foreground'.
+		self model lineColor bmWriteXMLTo: writer purpose: 'line'.
 		self writeIcons: writer.
 		self model image isEmptyOrNil ifFalse: [ 
 			writer tag: 'image' with: [ writer cdata: self model image] ].
