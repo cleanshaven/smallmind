@@ -43,8 +43,14 @@ BMPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Small Mind';
 		initialExtent: 1000@1000;
+		askOkToClose: true;
 		windowIcon: (self iconNamed: #bmAppIcon)
 		
+]
+
+{ #category : #'model - updating' }
+BMPresenter >> okToChange [ 
+	^false
 ]
 
 { #category : #accessing }

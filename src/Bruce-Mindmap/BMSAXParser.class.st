@@ -92,7 +92,7 @@ BMSAXParser >> handleEndDetail [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'handling - content' }
 BMSAXParser >> handleEndImage [
 	self top model image: stringBuilder.
 	self stringBuilder: ''
@@ -189,7 +189,7 @@ BMSAXParser >> handleRootNode [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'handling - content' }
 BMSAXParser >> handleTask: anAttributeDictionary [
 
 	self top model task current: ((anAttributeDictionary at: 'current') asSymbol)
@@ -246,9 +246,9 @@ BMSAXParser >> startElement: aQualifiedName attributes: anAttributeDictionary [
 	aQualifiedName = BMXMLTags text ifTrue: [ self stringBuilder: '' ].
 	aQualifiedName = BMXMLTags detail ifTrue: [ self stringBuilder: '' ].
 	aQualifiedName = BMXMLTags link ifTrue: [ self stringBuilder: '' ].
-	aQualifiedName = 'image' ifTrue: [ self stringBuilder: '' ].
+	aQualifiedName = BMXMLTags image ifTrue: [ self stringBuilder: '' ].
 	aQualifiedName = BMXMLTags icon ifTrue: [ self handleIcon: anAttributeDictionary ].
-	aQualifiedName = 'task' ifTrue: [ self handleTask: anAttributeDictionary ]
+	aQualifiedName = BMXMLTags task ifTrue: [ self handleTask: anAttributeDictionary ]
 
 	
 ]

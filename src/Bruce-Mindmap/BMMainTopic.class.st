@@ -72,7 +72,10 @@ BMMainTopic >> createMenu [
 
 				addLine;
 
-				add: 'File' subMenu: (self createFileMenu: box)])
+				add: 'File' subMenu: (self createFileMenu: box);
+				addLine;
+				add: 'About...' target: box selector: #showAbout argument: #();
+				addLine ])
 ]
 
 { #category : #defaults }
@@ -124,6 +127,7 @@ BMMainTopic >> modelChanged: aModel [
 	| aCircle |
 	super modelChanged: aModel.
 	aCircle := RSCircle new.
+	aCircle color: aModel backgroundColor.
 	aCircle extent: (self model image isEmptyOrNil 
 							ifTrue: [(self extent x + 5)@(self extent x + 5)]
 							ifFalse: [ ((self extent x + 5)max:64 + 5)@((self extent x + 5 )max:64 + 5) ] ).
@@ -207,6 +211,11 @@ BMMainTopic >> saveMap [
 		canvas filename: reference fullName.
 		self inform: 'Mindmap Saved'
 	]
+]
+
+{ #category : #'as yet unclassified' }
+BMMainTopic >> showAbout [ 
+	BMAboutDialog new openModal
 ]
 
 { #category : #writing }

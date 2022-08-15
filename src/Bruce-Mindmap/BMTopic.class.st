@@ -26,6 +26,7 @@ BMTopic >> addChild [
 			withBorderAttachPoint;
 			from: self;
 			to: newNode;
+			color: newNode model lineColor;
 			controlPointsController: RSHorizontalCPAPController new.
 		self canvas add: line.
 		RSForceBasedLayout new charge: -1000; on: self canvas nodes.
@@ -430,7 +431,7 @@ BMTopic >> labelChanged: aString [
 BMTopic >> lineColor [
 	| color |
 	
-	color := self getColor: Color red.
+	color := self getColor: self model lineColor.
 	color ifNotNil: [ self incomingLines do: [ :line | line color: color. ].
 		self model lineColor: color ].
 	self updateCanvas
@@ -559,7 +560,8 @@ BMTopic >> toClipboard [
 
 { #category : #'private ' }
 BMTopic >> updateCanvas [
-	self canvas ifNotNil: [ self canvas signalUpdate ]
+self canvas ifNotNil: [ self canvas signalUpdate ]
+
 ]
 
 { #category : #writing }
@@ -586,14 +588,14 @@ BMTopic >> writeNode: writer [
 
 	writer tag: self xmlNodeName with: [ 
 		writer tag: BMXMLTags text with: self model text.
-		self model details isEmptyOrNil ifFalse:[writer tag: 'detail' with: self model details].
-		self model link isEmptyOrNil ifFalse: [ writer tag: 'link' with: self model link ].
+		self model details isEmptyOrNil ifFalse:[writer tag: BMXMLTags detail with: self model details].
+		self model link isEmptyOrNil ifFalse: [ writer tag: BMXMLTags link with: self model link ].
 		self model font bmWriteXMLTo: writer.
-		self model foreColor bmWriteXMLTo: writer purpose: 'foreground'.
-		self model lineColor bmWriteXMLTo: writer purpose: 'line'.
+		self model foreColor bmWriteXMLTo: writer purpose: BMXMLTags foreground.
+		self model lineColor bmWriteXMLTo: writer purpose: BMXMLTags line.
 		self writeIcons: writer.
 		self model image isEmptyOrNil ifFalse: [ 
-			writer tag: 'image' with: [ writer cdata: self model image] ].
+			writer tag: BMXMLTags image with: [ writer cdata: self model image] ].
 		self model task writeToXML: writer.
 		self writeAdditionalTagsTo: writer. 
 		self model children do: [ :node | node writeNode: writer ]]

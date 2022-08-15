@@ -71,6 +71,16 @@ BMXMLTags class >> iconAttribute [
 ]
 
 { #category : #accessing }
+BMXMLTags class >> image [
+	^'image'
+]
+
+{ #category : #accessing }
+BMXMLTags class >> line [
+	^'line'
+]
+
+{ #category : #accessing }
 BMXMLTags class >> link [
 	^'link' 
 ]
@@ -111,6 +121,11 @@ BMXMLTags class >> slantValue [
 { #category : #constants }
 BMXMLTags class >> stretchValue [
 	^'stretchValue'
+]
+
+{ #category : #accessing }
+BMXMLTags class >> task [
+	^'task'
 ]
 
 { #category : #constants }
